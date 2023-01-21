@@ -1,10 +1,10 @@
-package types.attributes;
+package types.attributes.criticalAttributes;
 
 import interfaces.ClassFileElement;
 
 import java.util.List;
 
-public class AttributeInfo implements ClassFileElement {
+public class StackMapTableAttribute implements ClassFileElement {
     @Override
     public List<Byte> toHex() {
         return null;
