@@ -161,7 +161,7 @@ public class ClassFile {
                 ",\n minor_version=" + minor_version +
                 ",\n major_version=" + major_version +
                 ",\n constant_pool_count=" + constant_pool_count +
-                ",\n constant_pool=" + constant_pool +
+                ",\n constant_pool=" + constant_pool.toString() +
                 ",\n access_flags=" + access_flags +
                 ",\n this_class=" + this_class +
                 ",\n super_class=" + super_class +

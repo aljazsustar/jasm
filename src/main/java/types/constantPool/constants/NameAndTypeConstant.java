@@ -15,4 +15,14 @@ public class NameAndTypeConstant extends ConstantPoolElement implements ClassFil
     public List<Byte> toHex() {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "NameAndTypeConstant{" +
+                "name=" + name.toString() +
+                ", type=" + type.toString() +
+                ", tag=" + tag +
+                ", constantPoolIndex=" + constantPoolIndex +
+                '}';
+    }
 }

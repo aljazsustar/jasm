@@ -1,6 +1,7 @@
 package util;
 
-import java.util.List;
+import java.io.BufferedInputStream;
+import java.io.IOException;
 
 public class ParsingUtil {
 
@@ -43,4 +44,15 @@ public class ParsingUtil {
         }
     }
 
+    public static byte[] readNBytes(BufferedInputStream inputStream, Integer n) {
+        byte[] bytes = new byte[n];
+
+        try {
+            inputStream.read(bytes, 0, n);
+        } catch (IOException e) {
+            throw new RuntimeException("Napaka pri branju razredne datoteke.", e);
+        }
+
+        return bytes;
+    }
 }

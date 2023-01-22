@@ -1,11 +1,10 @@
 package parsing;
 
 import types.ClassFile;
+import types.constantPool.ConstantPool;
 import util.ParsingUtil;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,6 +27,7 @@ public class ClassFileParser {
         classFile.setMinor_version(this.parseMinorVersion());
         classFile.setMajor_version(this.parseMajorVersion());
         classFile.setConstant_pool_count(this.parseConstantPoolCount());
+        classFile.setConstant_pool(this.parseConstantPool(classFile.getConstant_pool_count()));
         this.closeInputStream();
         return classFile;
     }
@@ -40,31 +40,25 @@ public class ClassFileParser {
         }
     }
 
-    private byte[] parseNBytes(Integer n) {
-        byte[] bytes = new byte[n];
 
-        try {
-            this.inputStream.read(bytes, 0, n);
-        } catch (IOException e) {
-            throw new RuntimeException("Napaka pri branju razredne datoteke.", e);
-        }
-
-        return bytes;
-    }
 
     private Long parseMagic() {
-        return ParsingUtil.bytesToLong(this.parseNBytes(4));
+        return ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
     }
 
     private Integer parseMinorVersion() {
-        return ParsingUtil.bytesToInt(this.parseNBytes(2));
+        return ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
     }
 
     private Integer parseMajorVersion() {
-        return ParsingUtil.bytesToInt(this.parseNBytes(2));
+        return ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
     }
 
     private Integer parseConstantPoolCount() {
-        return ParsingUtil.bytesToInt(this.parseNBytes(2));
+        return ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+    }
+
+    private ConstantPool parseConstantPool(Integer constantPoolCount) {
+        return new ConstantPoolParser(this.inputStream, constantPoolCount).parseConstantPool();
     }
 }
