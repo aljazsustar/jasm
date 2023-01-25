@@ -5,8 +5,12 @@ import types.constantPool.ConstantPool;
 import types.constantPool.constants.ClassConstant;
 import types.constantPool.constants.FieldRefConstant;
 import types.constantPool.constants.NameAndTypeConstant;
+import types.constantPool.constants.methods.InterfaceMethodRefConstant;
 import types.constantPool.constants.methods.MethodRefConstant;
+import types.constantPool.constants.numeric.DoubleConstant;
+import types.constantPool.constants.numeric.FloatConstant;
 import types.constantPool.constants.numeric.IntegerConstant;
+import types.constantPool.constants.numeric.LongConstant;
 import types.constantPool.constants.strings.StringConstant;
 import types.constantPool.constants.strings.Utf8Constant;
 import util.ParsingUtil;
@@ -53,6 +57,18 @@ public class ConstantPoolParser {
                     break;
                 case ConstantPoolTags.CONSTANT_Integer:
                     constantPool.addToConstantPool(this.parseIntegerConstant());
+                    break;
+                case ConstantPoolTags.CONSTANT_Long:
+                    constantPool.addToConstantPool(this.parseLongConstant());
+                    break;
+                case ConstantPoolTags.CONSTANT_Float:
+                    constantPool.addToConstantPool(this.parseFloatConstant());
+                    break;
+                case ConstantPoolTags.CONSTANT_Double:
+                    constantPool.addToConstantPool(this.parseDoubleConstant());
+                    break;
+                case ConstantPoolTags.CONSTANT_InterfaceMethodref:
+                    constantPool.addToConstantPool(this.parseInterfaceMethodRefConstant());
                     break;
             }
         }
@@ -118,5 +134,35 @@ public class ConstantPoolParser {
         Integer value = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 4));
         integerConstant.setValue(value);
         return integerConstant;
+    }
+
+    private LongConstant parseLongConstant() {
+        LongConstant longConstant = new LongConstant(this.constantPoolIndex);
+        Long value = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 8));
+        longConstant.setValue(value);
+        return longConstant;
+    }
+
+    private FloatConstant parseFloatConstant() {
+        FloatConstant floatConstant = new FloatConstant(this.constantPoolIndex);
+        Integer value = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 4));
+        floatConstant.setValue(Float.intBitsToFloat(value));
+        return floatConstant;
+    }
+
+    private DoubleConstant parseDoubleConstant() {
+        DoubleConstant doubleConstant = new DoubleConstant(this.constantPoolIndex);
+        Long value = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 8));
+        doubleConstant.setValue(Double.longBitsToDouble(value));
+        return doubleConstant;
+    }
+
+    private InterfaceMethodRefConstant parseInterfaceMethodRefConstant() {
+        InterfaceMethodRefConstant interfaceMethodRefConstant = new InterfaceMethodRefConstant(this.constantPoolIndex);
+        Integer classIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        Integer nameAndTypeIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        interfaceMethodRefConstant.setClassIndex(classIndex);
+        interfaceMethodRefConstant.setNameAndTypeIndex(nameAndTypeIndex);
+        return interfaceMethodRefConstant;
     }
 }

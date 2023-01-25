@@ -1,4 +1,39 @@
 package types.constantPool.constants.numeric;
 
-public class LongConstant {
+import enums.ConstantPoolTags;
+import interfaces.ClassFileElement;
+import interfaces.ConstantPoolElement;
+
+import java.util.List;
+
+public class LongConstant extends ConstantPoolElement implements ClassFileElement {
+
+    private Long value;
+
+    public LongConstant(Integer constantPoolIndex) {
+        this.tag = ConstantPoolTags.CONSTANT_Long;
+        this.constantPoolIndex = constantPoolIndex;
+    }
+
+    @Override
+    public List<Byte> toHex() {
+        return null;
+    }
+
+    public Long getValue() {
+        return value;
+    }
+
+    public void setValue(Long value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "LongConstant{" +
+                "value=" + value +
+                ", tag=" + tag +
+                ", constantPoolIndex=" + constantPoolIndex +
+                '}';
+    }
 }
