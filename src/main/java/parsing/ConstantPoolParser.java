@@ -2,11 +2,11 @@ package parsing;
 
 import enums.ConstantPoolTags;
 import types.constantPool.ConstantPool;
-import types.constantPool.constants.ClassConstant;
-import types.constantPool.constants.FieldRefConstant;
-import types.constantPool.constants.NameAndTypeConstant;
+import types.constantPool.constants.*;
 import types.constantPool.constants.methods.InterfaceMethodRefConstant;
+import types.constantPool.constants.methods.MethodHandleConstant;
 import types.constantPool.constants.methods.MethodRefConstant;
+import types.constantPool.constants.methods.MethodTypeConstant;
 import types.constantPool.constants.numeric.DoubleConstant;
 import types.constantPool.constants.numeric.FloatConstant;
 import types.constantPool.constants.numeric.IntegerConstant;
@@ -69,6 +69,24 @@ public class ConstantPoolParser {
                     break;
                 case ConstantPoolTags.CONSTANT_InterfaceMethodref:
                     constantPool.addToConstantPool(this.parseInterfaceMethodRefConstant());
+                    break;
+                case ConstantPoolTags.CONSTANT_MethodHandle:
+                    constantPool.addToConstantPool(this.parseMethodHandleConstant());
+                    break;
+                case ConstantPoolTags.CONSTANT_MethodType:
+                    constantPool.addToConstantPool(this.parseMethodTypeConstant());
+                    break;
+                case ConstantPoolTags.CONSTANT_Dynamic:
+                    constantPool.addToConstantPool(this.parseDynamicConstant());
+                    break;
+                case ConstantPoolTags.CONSTANT_InvokeDynamic:
+                    constantPool.addToConstantPool(this.parseInvokeDynamicConstant());
+                    break;
+                case ConstantPoolTags.CONSTANT_Module:
+                    constantPool.addToConstantPool(this.parseModuleConstant());
+                    break;
+                case ConstantPoolTags.CONSTANT_Package:
+                    constantPool.addToConstantPool(this.parsePackageConstant());
                     break;
             }
         }
@@ -164,5 +182,53 @@ public class ConstantPoolParser {
         interfaceMethodRefConstant.setClassIndex(classIndex);
         interfaceMethodRefConstant.setNameAndTypeIndex(nameAndTypeIndex);
         return interfaceMethodRefConstant;
+    }
+
+    private MethodHandleConstant parseMethodHandleConstant() {
+        MethodHandleConstant methodHandleConstant = new MethodHandleConstant(this.constantPoolIndex);
+        Integer referenceKind = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        Integer referenceIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        methodHandleConstant.setReferenceKind(referenceKind);
+        methodHandleConstant.setReferenceIndex(referenceIndex);
+        return methodHandleConstant;
+    }
+
+    private MethodTypeConstant parseMethodTypeConstant() {
+        MethodTypeConstant methodTypeConstant = new MethodTypeConstant(this.constantPoolIndex);
+        Integer descriptorIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        methodTypeConstant.setDescriptorIndex(descriptorIndex);
+        return methodTypeConstant;
+    }
+
+    private DynamicConstant parseDynamicConstant() {
+        DynamicConstant dynamicConstant = new DynamicConstant(this.constantPoolIndex);
+        Integer bootstrapMethodAttrIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        Integer nameAndTypeIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        dynamicConstant.setBootstrapMethodAttrIndex(bootstrapMethodAttrIndex);
+        dynamicConstant.setNameAndTypeIndex(nameAndTypeIndex);
+        return dynamicConstant;
+    }
+
+    private InvokeDynamicConstant parseInvokeDynamicConstant() {
+        InvokeDynamicConstant invokeDynamicConstant = new InvokeDynamicConstant(this.constantPoolIndex);
+        Integer bootstrapMethodAttrIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        Integer nameAndTypeIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        invokeDynamicConstant.setBootstrapMethodAttrIndex(bootstrapMethodAttrIndex);
+        invokeDynamicConstant.setNameAndTypeIndex(nameAndTypeIndex);
+        return invokeDynamicConstant;
+    }
+
+    private ModuleConstant parseModuleConstant() {
+        ModuleConstant moduleConstant = new ModuleConstant(this.constantPoolIndex);
+        Integer nameIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        moduleConstant.setNameIndex(nameIndex);
+        return moduleConstant;
+    }
+
+    private PackageConstant parsePackageConstant() {
+        PackageConstant packageConstant = new PackageConstant(this.constantPoolIndex);
+        Integer nameIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        packageConstant.setNameIndex(nameIndex);
+        return packageConstant;
     }
 }

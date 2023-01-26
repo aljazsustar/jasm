@@ -4,7 +4,10 @@ import types.ClassFile;
 import types.constantPool.ConstantPool;
 import util.ParsingUtil;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,7 +15,7 @@ public class ClassFileParser {
     private final BufferedInputStream inputStream;
 
     public ClassFileParser(String path) {
-        FileInputStream inputStream = null;
+        FileInputStream inputStream;
         try {
             inputStream = new FileInputStream(path);
         } catch (FileNotFoundException e) {
