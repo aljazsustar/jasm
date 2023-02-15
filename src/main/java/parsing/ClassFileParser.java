@@ -38,6 +38,7 @@ public class ClassFileParser {
         classFile.setSuper_class((ClassConstant) classFile.getConstant_pool().getConstantPoolElement(this.parseSuperClassConstantPoolIndex() - 1));
         classFile.setInterfaces_count(this.parseInterfacesCount());
         classFile.setInterfaces(this.parseInterfaces(classFile.getInterfaces_count(), classFile.getConstant_pool()));
+        classFile.setFields_count(this.parseFieldsCount());
         this.closeInputStream();
         return classFile;
     }
@@ -90,5 +91,9 @@ public class ClassFileParser {
 
     private Interfaces parseInterfaces(Integer interfacesCount, ConstantPool constantPool) {
         return new InterfacesParser(this.inputStream, interfacesCount, constantPool).parseInterfaces();
+    }
+
+    private Integer parseFieldsCount() {
+        return ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
     }
 }
