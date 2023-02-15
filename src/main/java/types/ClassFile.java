@@ -1,6 +1,5 @@
 package types;
 
-import enums.AccessFlags;
 import types.attributes.Attributes;
 import types.constantPool.ConstantPool;
 import types.constantPool.constants.ClassConstant;
@@ -14,7 +13,7 @@ public class ClassFile {
     private Integer major_version;
     private Integer constant_pool_count;
     private ConstantPool constant_pool;
-    private AccessFlags access_flags;
+    private Integer access_flags;
     private ClassConstant this_class;
     private ClassConstant super_class;
     private Integer interfaces_count;
@@ -66,11 +65,11 @@ public class ClassFile {
         this.constant_pool = constant_pool;
     }
 
-    public AccessFlags getAccess_flags() {
+    public Integer getAccess_flags() {
         return access_flags;
     }
 
-    public void setAccess_flags(AccessFlags access_flags) {
+    public void setAccess_flags(Integer access_flags) {
         this.access_flags = access_flags;
     }
 

@@ -2,6 +2,8 @@ package parsing;
 
 import types.ClassFile;
 import types.constantPool.ConstantPool;
+import types.constantPool.constants.ClassConstant;
+import types.interfaces.Interfaces;
 import util.ParsingUtil;
 
 import java.io.BufferedInputStream;
@@ -31,6 +33,11 @@ public class ClassFileParser {
         classFile.setMajor_version(this.parseMajorVersion());
         classFile.setConstant_pool_count(this.parseConstantPoolCount());
         classFile.setConstant_pool(this.parseConstantPool(classFile.getConstant_pool_count()));
+        classFile.setAccess_flags(this.parseAccessFlags());
+        classFile.setThis_class((ClassConstant) classFile.getConstant_pool().getConstantPoolElement(this.parseThisClassConstantPoolIndex() - 1));
+        classFile.setSuper_class((ClassConstant) classFile.getConstant_pool().getConstantPoolElement(this.parseSuperClassConstantPoolIndex() - 1));
+        classFile.setInterfaces_count(this.parseInterfacesCount());
+        classFile.setInterfaces(this.parseInterfaces(classFile.getInterfaces_count(), classFile.getConstant_pool()));
         this.closeInputStream();
         return classFile;
     }
@@ -63,5 +70,25 @@ public class ClassFileParser {
 
     private ConstantPool parseConstantPool(Integer constantPoolCount) {
         return new ConstantPoolParser(this.inputStream, constantPoolCount).parseConstantPool();
+    }
+
+    private Integer parseAccessFlags() {
+        return ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+    }
+
+    private Integer parseThisClassConstantPoolIndex() {
+        return ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+    }
+
+    private Integer parseSuperClassConstantPoolIndex() {
+        return ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+    }
+
+    private Integer parseInterfacesCount() {
+        return ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+    }
+
+    private Interfaces parseInterfaces(Integer interfacesCount, ConstantPool constantPool) {
+        return new InterfacesParser(this.inputStream, interfacesCount, constantPool).parseInterfaces();
     }
 }

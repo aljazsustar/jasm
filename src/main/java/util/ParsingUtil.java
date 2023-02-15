@@ -18,6 +18,7 @@ public class ParsingUtil {
         for (byte b : bytes) {
             res = (res << 8) | (b & 0xFF);
         }
+        //System.out.printf("%d, %04X\n",bytes.length, res);
         return res;
 
     }

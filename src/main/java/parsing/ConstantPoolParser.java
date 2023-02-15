@@ -33,8 +33,13 @@ public class ConstantPoolParser {
 
     public ConstantPool parseConstantPool() {
 
-        for (; this.constantPoolIndex < this.constantPoolSize; this.constantPoolIndex++) {
+        for (; this.constantPoolIndex < this.constantPoolSize - 1; this.constantPoolIndex++) {
             Integer tag = this.parseTag();
+
+            if (tag == ConstantPoolTags.CONSTANT_Double || tag == ConstantPoolTags.CONSTANT_Long) {
+                this.constantPool.addToConstantPool(null);
+                ++this.constantPoolIndex;
+            }
 
             switch (tag) {
                 case ConstantPoolTags.CONSTANT_Class:
@@ -186,7 +191,7 @@ public class ConstantPoolParser {
 
     private MethodHandleConstant parseMethodHandleConstant() {
         MethodHandleConstant methodHandleConstant = new MethodHandleConstant(this.constantPoolIndex);
-        Integer referenceKind = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        Integer referenceKind = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 1));
         Integer referenceIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
         methodHandleConstant.setReferenceKind(referenceKind);
         methodHandleConstant.setReferenceIndex(referenceIndex);
