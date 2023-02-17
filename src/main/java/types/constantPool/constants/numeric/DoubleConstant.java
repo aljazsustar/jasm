@@ -3,10 +3,11 @@ package types.constantPool.constants.numeric;
 import enums.ConstantPoolTags;
 import interfaces.ClassFileElement;
 import interfaces.ConstantPoolElement;
+import interfaces.ConstantValue;
 
 import java.util.List;
 
-public class DoubleConstant extends ConstantPoolElement implements ClassFileElement {
+public class DoubleConstant extends ConstantPoolElement implements ClassFileElement, ConstantValue {
 
     private Double value;
 

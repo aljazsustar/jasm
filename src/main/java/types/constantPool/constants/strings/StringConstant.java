@@ -3,10 +3,11 @@ package types.constantPool.constants.strings;
 import enums.ConstantPoolTags;
 import interfaces.ClassFileElement;
 import interfaces.ConstantPoolElement;
+import interfaces.ConstantValue;
 
 import java.util.List;
 
-public class StringConstant extends ConstantPoolElement implements ClassFileElement {
+public class StringConstant extends ConstantPoolElement implements ClassFileElement, ConstantValue {
 
     private Utf8Constant value;
     private Integer stringIndex;

@@ -3,6 +3,7 @@ package parsing;
 import types.ClassFile;
 import types.constantPool.ConstantPool;
 import types.constantPool.constants.ClassConstant;
+import types.fields.Fields;
 import types.interfaces.Interfaces;
 import util.ParsingUtil;
 
@@ -39,6 +40,7 @@ public class ClassFileParser {
         classFile.setInterfaces_count(this.parseInterfacesCount());
         classFile.setInterfaces(this.parseInterfaces(classFile.getInterfaces_count(), classFile.getConstant_pool()));
         classFile.setFields_count(this.parseFieldsCount());
+        classFile.setFields(this.parseFields(classFile.getFields_count(), classFile.getConstant_pool()));
         this.closeInputStream();
         return classFile;
     }
@@ -95,5 +97,9 @@ public class ClassFileParser {
 
     private Integer parseFieldsCount() {
         return ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+    }
+
+    private Fields parseFields(Integer fieldsCount, ConstantPool constantPool) {
+        return new FieldsParser(this.inputStream, fieldsCount, constantPool).parse();
     }
 }
