@@ -1,5 +1,6 @@
 package parsing;
 
+import exceptions.AttributeDoesNotExistException;
 import types.ClassFile;
 import types.constantPool.ConstantPool;
 import types.constantPool.constants.ClassConstant;
@@ -27,7 +28,7 @@ public class ClassFileParser {
         this.inputStream = new BufferedInputStream(inputStream);
     }
 
-    public ClassFile parse() {
+    public ClassFile parse() throws AttributeDoesNotExistException {
         ClassFile classFile = new ClassFile();
         classFile.setMagic(this.parseMagic());
         classFile.setMinor_version(this.parseMinorVersion());
@@ -99,7 +100,7 @@ public class ClassFileParser {
         return ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
     }
 
-    private Fields parseFields(Integer fieldsCount, ConstantPool constantPool) {
+    private Fields parseFields(Integer fieldsCount, ConstantPool constantPool) throws AttributeDoesNotExistException {
         return new FieldsParser(this.inputStream, fieldsCount, constantPool).parse();
     }
 }

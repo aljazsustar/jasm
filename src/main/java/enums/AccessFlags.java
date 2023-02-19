@@ -21,6 +21,13 @@ public class AccessFlags {
     public Set<String> getAccessFlagsList() {
         return this.accessFlags.keySet();
     }
+
+    @Override
+    public String toString() {
+        return "AccessFlags{" +
+                this.accessFlags.keySet().stream().reduce("", (res, el) -> res + el + ",") +
+                '}';
+    }
 }
 
 class AccessFlagsDef {
