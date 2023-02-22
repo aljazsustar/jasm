@@ -3,7 +3,8 @@ package interfaces;
 import enums.AccessFlags;
 import types.attributes.Attributes;
 
-public abstract class FieldBase implements ClassFileElement {
+public abstract class MethodBase {
+
     protected AccessFlags accessFlags;
     protected Integer nameIndex;
     protected Integer descriptorIndex;

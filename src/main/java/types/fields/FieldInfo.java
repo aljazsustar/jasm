@@ -1,7 +1,6 @@
 package types.fields;
 
 import enums.AccessFlags;
-import interfaces.AttributeBase;
 import interfaces.ClassFileElement;
 import interfaces.FieldBase;
 import types.attributes.Attributes;
@@ -16,14 +15,6 @@ public class FieldInfo extends FieldBase implements ClassFileElement {
         this.descriptorIndex = descriptorIndex;
         this.attributesCount = attributesCount;
         this.attributes = attributes;
-    }
-
-    public void addAttribute(AttributeBase attribute) {
-        this.attributes.add(attribute);
-    }
-
-    public void addAccessFlags(Integer accessFlags) {
-        this.accessFlags = new AccessFlags(accessFlags);
     }
 
     @Override

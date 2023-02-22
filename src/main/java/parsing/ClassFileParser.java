@@ -6,6 +6,7 @@ import types.constantPool.ConstantPool;
 import types.constantPool.constants.ClassConstant;
 import types.fields.Fields;
 import types.interfaces.Interfaces;
+import types.methods.Methods;
 import util.ParsingUtil;
 
 import java.io.BufferedInputStream;
@@ -42,6 +43,9 @@ public class ClassFileParser {
         classFile.setInterfaces(this.parseInterfaces(classFile.getInterfaces_count(), classFile.getConstant_pool()));
         classFile.setFields_count(this.parseFieldsCount());
         classFile.setFields(this.parseFields(classFile.getFields_count(), classFile.getConstant_pool()));
+        classFile.setMethods_count(this.parseMethodsCount());
+        classFile.setMethods(this.parseMethods(classFile.getMethods_count(), classFile.getConstant_pool()));
+        classFile.setAttributes_count(this.parseAttributesCount());
         this.closeInputStream();
         return classFile;
     }
@@ -102,5 +106,17 @@ public class ClassFileParser {
 
     private Fields parseFields(Integer fieldsCount, ConstantPool constantPool) throws AttributeDoesNotExistException {
         return new FieldsParser(this.inputStream, fieldsCount, constantPool).parse();
+    }
+
+    private Integer parseMethodsCount() {
+        return ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+    }
+
+    private Methods parseMethods(Integer methodsCount, ConstantPool constantPool) throws AttributeDoesNotExistException {
+        return new MethodsParser(this.inputStream, methodsCount, constantPool).parse();
+    }
+
+    private Integer parseAttributesCount() {
+        return ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
     }
 }
