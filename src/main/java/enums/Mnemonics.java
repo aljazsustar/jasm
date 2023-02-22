@@ -224,4 +224,8 @@ public class Mnemonics {
         return this.mnemonicsByOpcode.get(mnemonic);
     }
 
+    public Integer getOpcodeByMnemonic(String mnemonic) {
+        return this.mnemonicsByString.get(mnemonic);
+    }
+
 }
