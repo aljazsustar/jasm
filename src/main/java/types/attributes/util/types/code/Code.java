@@ -1,4 +1,4 @@
-package types.attributes.util.types;
+package types.attributes.util.types.code;
 
 import interfaces.ClassFileElement;
 import util.types.Pair;

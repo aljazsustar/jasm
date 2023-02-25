@@ -2,8 +2,8 @@ package types.attributes.criticalAttributes;
 
 import interfaces.AttributeBase;
 import types.attributes.Attributes;
-import types.attributes.util.types.Code;
-import types.attributes.util.types.Exceptions;
+import types.attributes.util.types.code.Code;
+import types.attributes.util.types.code.Exceptions;
 
 import java.util.List;
 

@@ -1,10 +1,10 @@
 package types.attributes.util;
 
 import enums.Mnemonics;
-import types.attributes.util.types.Arguments;
-import types.attributes.util.types.Code;
-import types.attributes.util.types.Exceptions;
-import types.attributes.util.types.Mnemonic;
+import types.attributes.util.types.code.Exception;
+import types.attributes.util.types.code.*;
+import types.attributes.util.types.lineNumberTable.LineNumberTable;
+import types.attributes.util.types.lineNumberTable.LineNumberTableElement;
 import types.constantPool.ConstantPool;
 import types.constantPool.constants.ClassConstant;
 import util.ParsingUtil;
@@ -43,10 +43,24 @@ public class AttributesUtil {
             Integer catchTypeIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(inputStream, 2));
             System.out.println(catchTypeIndex);
             ClassConstant catchType = (ClassConstant) constantPool.getConstantPoolElement(catchTypeIndex - 1);
-            types.attributes.util.types.Exception exception = new types.attributes.util.types.Exception(startPc, endPc, handlerPc, catchTypeIndex, catchType);
+            Exception exception = new Exception(startPc, endPc, handlerPc, catchTypeIndex, catchType);
             exceptions.addException(exception);
         }
 
         return exceptions;
+    }
+
+    public static LineNumberTable parseLineNumberTable(BufferedInputStream inputStream, Integer lineNumberTableLength) {
+
+        LineNumberTable lineNumberTable = new LineNumberTable(lineNumberTableLength);
+
+        for (Integer i = 0; i < lineNumberTableLength; i++) {
+            Integer startPc = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(inputStream, 2));
+            Integer lineNumber = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(inputStream, 2));
+            LineNumberTableElement element = new LineNumberTableElement(startPc, lineNumber);
+            lineNumberTable.addLineNumberTableElement(element);
+        }
+
+        return lineNumberTable;
     }
 }

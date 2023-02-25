@@ -6,9 +6,11 @@ import interfaces.ConstantValue;
 import types.attributes.Attributes;
 import types.attributes.criticalAttributes.CodeAttribute;
 import types.attributes.criticalAttributes.ConstantValueAttribute;
+import types.attributes.usefulAttributes.LineNumberTableAttribute;
 import types.attributes.util.AttributesUtil;
-import types.attributes.util.types.Code;
-import types.attributes.util.types.Exceptions;
+import types.attributes.util.types.code.Code;
+import types.attributes.util.types.code.Exceptions;
+import types.attributes.util.types.lineNumberTable.LineNumberTable;
 import types.constantPool.ConstantPool;
 import types.constantPool.constants.strings.Utf8Constant;
 import util.ParsingUtil;
@@ -45,6 +47,8 @@ public class AttributeParser {
                 return this.parseConstantValueAttribute(attributeName);
             case "Code":
                 return this.parseCodeAttribute(attributeName);
+            case "LineNumberTable":
+                return this.parseLineNumberTableAttribute(attributeName);
         }
 
         throw new AttributeDoesNotExistException();
@@ -64,7 +68,6 @@ public class AttributeParser {
         Integer maxLocals = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
         Long codeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
         Code code = AttributesUtil.parseCode(this.inputStream, codeLength);
-        System.out.println(code);
         Integer exceptionTableLength = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
         Exceptions exceptions = AttributesUtil.parseExceptions(this.inputStream, this.constantPool, exceptionTableLength);
         Integer attributesCount = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
@@ -73,5 +76,10 @@ public class AttributeParser {
                 exceptions, attributesCount, attributes);
     }
 
-
+    private LineNumberTableAttribute parseLineNumberTableAttribute(Utf8Constant attributeName) {
+        Long attributeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
+        Integer lineNumberTableLength = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        LineNumberTable lineNumberTable = AttributesUtil.parseLineNumberTable(this.inputStream, lineNumberTableLength);
+        return new LineNumberTableAttribute(attributeName, attributeLength, lineNumberTableLength, lineNumberTable);
+    }
 }
