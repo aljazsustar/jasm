@@ -4,7 +4,11 @@ import exceptions.AttributeDoesNotExistException;
 import interfaces.AttributeBase;
 import interfaces.ConstantValue;
 import types.attributes.Attributes;
+import types.attributes.criticalAttributes.CodeAttribute;
 import types.attributes.criticalAttributes.ConstantValueAttribute;
+import types.attributes.util.AttributesUtil;
+import types.attributes.util.types.Code;
+import types.attributes.util.types.Exceptions;
 import types.constantPool.ConstantPool;
 import types.constantPool.constants.strings.Utf8Constant;
 import util.ParsingUtil;
@@ -39,6 +43,8 @@ public class AttributeParser {
         switch (attributeName.getValue()) {
             case "ConstantValue":
                 return this.parseConstantValueAttribute(attributeName);
+            case "Code":
+                return this.parseCodeAttribute(attributeName);
         }
 
         throw new AttributeDoesNotExistException();
@@ -51,5 +57,21 @@ public class AttributeParser {
         constantValueAttribute.setConstantValue((ConstantValue) this.constantPool.getConstantPoolElement(constantValueIndex - 1));
         return constantValueAttribute;
     }
+
+    private CodeAttribute parseCodeAttribute(Utf8Constant attributeName) throws AttributeDoesNotExistException {
+        Long attributeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
+        Integer maxStack = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        Integer maxLocals = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        Long codeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
+        Code code = AttributesUtil.parseCode(this.inputStream, codeLength);
+        System.out.println(code);
+        Integer exceptionTableLength = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        Exceptions exceptions = AttributesUtil.parseExceptions(this.inputStream, this.constantPool, exceptionTableLength);
+        Integer attributesCount = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        Attributes attributes = new AttributeParser(attributesCount, this.inputStream, this.constantPool).parse();
+        return new CodeAttribute(attributeLength, maxStack, maxLocals, codeLength, code, exceptionTableLength,
+                exceptions, attributesCount, attributes);
+    }
+
 
 }

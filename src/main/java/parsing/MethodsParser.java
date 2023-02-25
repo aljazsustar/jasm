@@ -34,6 +34,7 @@ public class MethodsParser {
     private MethodInfo parseMethod() throws AttributeDoesNotExistException {
         AccessFlags accessFlags = new AccessFlags(ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2)));
         Integer nameIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        System.out.println(this.constantPool.getConstantPoolElement(nameIndex - 1));
         Integer descriptorIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
         Integer attributesCount = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
         Attributes fieldAttributes = new AttributeParser(attributesCount, this.inputStream, this.constantPool).parse();

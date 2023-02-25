@@ -1,9 +1,11 @@
 package types.attributes.util.types;
 
+import interfaces.ClassFileElement;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Arguments {
+public class Arguments implements ClassFileElement {
 
     private final List<Integer> arguments;
 
@@ -30,5 +32,10 @@ public class Arguments {
 
         sb.append("]");
         return sb.toString();
+    }
+
+    @Override
+    public List<Byte> toHex() {
+        return null;
     }
 }

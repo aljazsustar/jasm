@@ -18,6 +18,19 @@ public class CodeAttribute extends AttributeBase {
     private Integer attributesCount;
     private Attributes attributes;
 
+    public CodeAttribute(Long attributeLength, Integer maxStack, Integer maxLocals, Long codeLength, Code code, Integer exceptionTableLength,
+                         Exceptions exceptionTable, Integer attributesCount, Attributes attributes) {
+        this.attributeLength = attributeLength;
+        this.maxStack = maxStack;
+        this.maxLocals = maxLocals;
+        this.codeLength = codeLength;
+        this.code = code;
+        this.exceptionTableLength = exceptionTableLength;
+        this.exceptionTable = exceptionTable;
+        this.attributesCount = attributesCount;
+        this.attributes = attributes;
+    }
+
     @Override
     public List<Byte> toHex() {
         return null;

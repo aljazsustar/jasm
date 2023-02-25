@@ -15,7 +15,6 @@
     </properties>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.ow2.asm/asm -->
     </dependencies>
 
 </project>
