@@ -2,6 +2,7 @@ package parsing;
 
 import exceptions.AttributeDoesNotExistException;
 import types.ClassFile;
+import types.attributes.Attributes;
 import types.constantPool.ConstantPool;
 import types.constantPool.constants.ClassConstant;
 import types.fields.Fields;
@@ -46,6 +47,7 @@ public class ClassFileParser {
         classFile.setMethods_count(this.parseMethodsCount());
         classFile.setMethods(this.parseMethods(classFile.getMethods_count(), classFile.getConstant_pool()));
         classFile.setAttributes_count(this.parseAttributesCount());
+        classFile.setAttributes(this.parseAttributes(classFile.getAttributes_count(), classFile.getConstant_pool()));
         this.closeInputStream();
         return classFile;
     }
@@ -118,5 +120,9 @@ public class ClassFileParser {
 
     private Integer parseAttributesCount() {
         return ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+    }
+
+    private Attributes parseAttributes(Integer attributesCount, ConstantPool constantPool) throws AttributeDoesNotExistException {
+        return new AttributeParser(attributesCount, this.inputStream, constantPool).parse();
     }
 }

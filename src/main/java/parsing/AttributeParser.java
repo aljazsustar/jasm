@@ -7,6 +7,7 @@ import types.attributes.Attributes;
 import types.attributes.criticalAttributes.CodeAttribute;
 import types.attributes.criticalAttributes.ConstantValueAttribute;
 import types.attributes.usefulAttributes.LineNumberTableAttribute;
+import types.attributes.usefulAttributes.SourceFileAttribute;
 import types.attributes.util.AttributesUtil;
 import types.attributes.util.types.code.Code;
 import types.attributes.util.types.code.Exceptions;
@@ -49,6 +50,8 @@ public class AttributeParser {
                 return this.parseCodeAttribute(attributeName);
             case "LineNumberTable":
                 return this.parseLineNumberTableAttribute(attributeName);
+            case "SourceFile":
+                return this.parseSourceFileAttribute(attributeName);
         }
 
         throw new AttributeDoesNotExistException();
@@ -81,5 +84,12 @@ public class AttributeParser {
         Integer lineNumberTableLength = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
         LineNumberTable lineNumberTable = AttributesUtil.parseLineNumberTable(this.inputStream, lineNumberTableLength);
         return new LineNumberTableAttribute(attributeName, attributeLength, lineNumberTableLength, lineNumberTable);
+    }
+
+    private SourceFileAttribute parseSourceFileAttribute(Utf8Constant attributeName) {
+        Long attributeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
+        Integer nameConstantPoolIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        Utf8Constant sourceFileName = (Utf8Constant) this.constantPool.getConstantPoolElement(nameConstantPoolIndex - 1);
+        return new SourceFileAttribute(attributeName, attributeLength, nameConstantPoolIndex, sourceFileName);
     }
 }
