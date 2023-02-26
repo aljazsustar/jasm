@@ -6,6 +6,7 @@ import interfaces.ConstantValue;
 import types.attributes.Attributes;
 import types.attributes.criticalAttributes.CodeAttribute;
 import types.attributes.criticalAttributes.ConstantValueAttribute;
+import types.attributes.criticalAttributes.StackMapTableAttribute;
 import types.attributes.usefulAttributes.LineNumberTableAttribute;
 import types.attributes.usefulAttributes.SourceFileAttribute;
 import types.attributes.util.AttributesUtil;
@@ -52,6 +53,15 @@ public class AttributeParser {
                 return this.parseLineNumberTableAttribute(attributeName);
             case "SourceFile":
                 return this.parseSourceFileAttribute(attributeName);
+            case "StackMapTable":
+                return this.parseStackMapTableAttribute(attributeName);
+            case "Exceptions":
+                return this.parseExceptionsAttribute(attributeName);
+            case "BootstrapMethods":
+                return this.parseBootstrapMethods(attributeName);
+            case "InnerClasses":
+                return this.parseInnerClassesAttribute(attributeName);
+
         }
 
         throw new AttributeDoesNotExistException();
@@ -91,5 +101,29 @@ public class AttributeParser {
         Integer nameConstantPoolIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
         Utf8Constant sourceFileName = (Utf8Constant) this.constantPool.getConstantPoolElement(nameConstantPoolIndex - 1);
         return new SourceFileAttribute(attributeName, attributeLength, nameConstantPoolIndex, sourceFileName);
+    }
+
+    private StackMapTableAttribute parseStackMapTableAttribute(Utf8Constant attributeNane) {
+        Long attributeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
+        ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, attributeLength.intValue()));
+        return null;
+    }
+
+    private AttributeBase parseExceptionsAttribute(Utf8Constant attributeName) {
+        Long attributeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
+        ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, attributeLength.intValue()));
+        return null;
+    }
+
+    private AttributeBase parseBootstrapMethods(Utf8Constant attributeName) {
+        Long attributeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
+        ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, attributeLength.intValue()));
+        return null;
+    }
+
+    private AttributeBase parseInnerClassesAttribute(Utf8Constant attributeName) {
+        Long attributeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
+        ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, attributeLength.intValue()));
+        return null;
     }
 }

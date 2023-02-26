@@ -1,3 +1,4 @@
+import com.google.gson.Gson;
 import exceptions.AttributeDoesNotExistException;
 import parsing.ClassFileParser;
 import types.ClassFile;
@@ -10,7 +11,8 @@ public class Main {
         compileJavaFile(args[0]);
         ClassFileParser parser = new ClassFileParser(args[0].replace(".java", ".class"));
         ClassFile classFile = parser.parse();
-        System.out.println(classFile);
+        Gson gson = new Gson();
+        System.out.println(gson.toJson(classFile));
     }
 
     public static void compileJavaFile(String path) {

@@ -37,7 +37,7 @@ public class Attributes implements ClassFileElement {
         sb.append("attributes = [\n");
 
         for (AttributeBase attributeBase : this.attributes) {
-            sb.append("\t{\n\t\t").append(attributeBase.toString()).append("\n\t}\n");
+            sb.append("\t{\n\t\t").append(attributeBase != null ? attributeBase.toString() : "").append("\n\t}\n");
         }
 
         sb.append("]");

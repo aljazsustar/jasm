@@ -16,7 +16,6 @@ public class AttributesUtil {
     public static Code parseCode(BufferedInputStream inputStream, Long codeLength) {
         Code code = new Code();
         Mnemonics mnemonics = new Mnemonics();
-        System.out.println(codeLength);
         for (int i = 0; i < codeLength; i++) {
             // TODO: handle commands with variable number args (wide, tableswitch, lookupswitch)
             Integer opcode = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(inputStream, 1));
@@ -34,14 +33,12 @@ public class AttributesUtil {
 
     public static Exceptions parseExceptions(BufferedInputStream inputStream, ConstantPool constantPool, Integer exceptionTableLength) {
         Exceptions exceptions = new Exceptions(exceptionTableLength);
-        System.out.println(exceptionTableLength);
 
         for (Integer i = 0; i < exceptionTableLength; i++) {
             Integer startPc = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(inputStream, 2));
             Integer endPc = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(inputStream, 2));
             Integer handlerPc = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(inputStream, 2));
             Integer catchTypeIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(inputStream, 2));
-            System.out.println(catchTypeIndex);
             ClassConstant catchType = (ClassConstant) constantPool.getConstantPoolElement(catchTypeIndex - 1);
             Exception exception = new Exception(startPc, endPc, handlerPc, catchTypeIndex, catchType);
             exceptions.addException(exception);
