@@ -1,7 +1,5 @@
 package interfaces;
 
-import enums.ConstantPoolTags;
-
 public abstract class ConstantPoolElement implements ClassFileElement {
     protected int tag;
     protected Integer constantPoolIndex;

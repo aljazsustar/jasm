@@ -61,7 +61,6 @@ public class ClassFileParser {
     }
 
 
-
     private Long parseMagic() {
         return ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
     }
