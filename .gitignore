@@ -1,4 +1,11 @@
-.idea
-*.class*
-target
-.token
+api/.idea
+api/*.class*
+api/target
+api/.token
+api/jasm-insert/target
+api/jasm-web/target
+api/jasm-web/dependency-reduced-pom.xml
+api/jasm-parser/target
+ui/.vscode
+ui/node_modules
+ui/package-lock.json
