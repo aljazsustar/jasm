@@ -1,5 +1,6 @@
 package types;
 
+import com.google.gson.Gson;
 import types.attributes.Attributes;
 import types.constantPool.ConstantPool;
 import types.constantPool.constants.ClassConstant;
@@ -155,23 +156,7 @@ public class ClassFile {
 
     @Override
     public String toString() {
-        return "ClassFile {\n" +
-                " magic=" + magic +
-                ",\n minor_version=" + minor_version +
-                ",\n major_version=" + major_version +
-                ",\n constant_pool_count=" + constant_pool_count +
-                ",\n constant_pool=" + constant_pool.toString() +
-                ",\n access_flags=" + access_flags +
-                ",\n this_class=" + this_class +
-                ",\n super_class=" + super_class +
-                ",\n interfaces_count=" + interfaces_count +
-                ",\n interfaces=" + interfaces +
-                ",\n fields_count=" + fields_count +
-                ",\n fields=" + fields +
-                ",\n methods_count=" + methods_count +
-                ",\n methods=" + methods +
-                ",\n attributes_count=" + attributes_count +
-                ",\n attributes=" + attributes +
-                "\n}";
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }
