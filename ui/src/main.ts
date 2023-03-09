@@ -1,11 +1,7 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import './assets/main.css'
+import { AppModule } from './app/app.module';
 
-const app = createApp(App)
 
-app.use(router)
-
-app.mount('#app')
+platformBrowserDynamic().bootstrapModule(AppModule)
+  .catch(err => console.error(err));
