@@ -1,0 +1,10 @@
+<div class="editor-parent row mx-1">
+  <div class="col-6" style="flex-direction: column">
+    <app-code-editor-toolbar (onCompile)="onCompile()"></app-code-editor-toolbar>
+    <app-code-editor class="h-100" #codeEditor></app-code-editor>
+  </div>
+  <div class="col-6">
+    <h2>Constant pool info</h2>
+    <p>{{constantPoolInfo}}</p>
+  </div>
+</div>
