@@ -1,8 +1,8 @@
 package com.example.jasm.v1.resources;
 
-import com.example.jasm_parser.exceptions.AttributeDoesNotExistException;
-import com.example.jasm_parser.parsing.ClassFileParser;
-import com.example.jasm_parser.types.ClassFile;
+import com.example.parser.exceptions.AttributeDoesNotExistException;
+import com.example.parser.parsing.ClassFileParser;
+import com.example.parser.types.ClassFile;
 import com.kumuluz.ee.cors.annotations.CrossOrigin;
 
 import javax.annotation.security.PermitAll;
