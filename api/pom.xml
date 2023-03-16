@@ -24,9 +24,9 @@
     </properties>
 
     <modules>
-        <module>jasm-parser</module>
-        <module>jasm-insert</module>
-        <module>jasm-web</module>
+        <module>parser</module>
+        <module>insert</module>
+        <module>web</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -40,7 +40,7 @@
             </dependency>
             <dependency>
                 <groupId>org.example</groupId>
-                <artifactId>jasm-parser</artifactId>
+                <artifactId>parser</artifactId>
                 <version>1.2-SNAPSHOT</version>
             </dependency>
             <dependency>
