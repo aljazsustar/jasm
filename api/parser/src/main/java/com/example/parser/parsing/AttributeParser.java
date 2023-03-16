@@ -7,9 +7,11 @@ import com.example.parser.types.attributes.Attributes;
 import com.example.parser.types.attributes.criticalAttributes.CodeAttribute;
 import com.example.parser.types.attributes.criticalAttributes.ConstantValueAttribute;
 import com.example.parser.types.attributes.criticalAttributes.StackMapTableAttribute;
+import com.example.parser.types.attributes.optionalAttributes.RuntimeVisibleAnnotations;
 import com.example.parser.types.attributes.usefulAttributes.LineNumberTableAttribute;
 import com.example.parser.types.attributes.usefulAttributes.SourceFileAttribute;
 import com.example.parser.types.attributes.util.AttributesUtil;
+import com.example.parser.types.attributes.util.types.annotations.Annotations;
 import com.example.parser.types.attributes.util.types.code.Code;
 import com.example.parser.types.attributes.util.types.code.Exceptions;
 import com.example.parser.types.attributes.util.types.lineNumberTable.LineNumberTable;
@@ -61,6 +63,8 @@ public class AttributeParser {
                 return this.parseBootstrapMethods(attributeName);
             case "InnerClasses":
                 return this.parseInnerClassesAttribute(attributeName);
+            case "RuntimeVisibleAnnotations":
+                return this.parseRuntimeVisibleAnnotationsAttribute(attributeName);
 
         }
 
@@ -125,5 +129,12 @@ public class AttributeParser {
         Long attributeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
         ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, attributeLength.intValue()));
         return null;
+    }
+
+    private AttributeBase parseRuntimeVisibleAnnotationsAttribute(Utf8Constant attributeName) {
+        Long attributeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
+        Integer numAnnotations = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        Annotations attributes = AttributesUtil.parseAnnotations(this.inputStream, this.constantPool, numAnnotations);
+        return new RuntimeVisibleAnnotations(attributeName, attributeLength, numAnnotations, attributes);
     }
 }

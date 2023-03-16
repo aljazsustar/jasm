@@ -34,7 +34,7 @@ public class Jasm {
 
         ClassFile cf = null;
         try {
-            cf = new ClassFileParser("Test1.class").parse();
+            cf = new ClassFileParser("Test.class").parse();
         } catch (AttributeDoesNotExistException e) {
             return Response.serverError().build();
         }
