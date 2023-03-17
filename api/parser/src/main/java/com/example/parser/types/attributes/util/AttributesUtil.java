@@ -100,7 +100,8 @@ public class AttributesUtil {
 
     private static ElementValue<? extends ElementValueType> parseElementValue(BufferedInputStream inputStream, ConstantPool constantPool) {
 
-        char tag = Character.forDigit(ParsingUtil.bytesToInt(ParsingUtil.readNBytes(inputStream, 1)), 10);
+        Integer ch = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(inputStream, 1));
+        char tag = String.valueOf(Character.toChars(ch)).charAt(0);
         switch (tag) {
             case 'e':
                 Integer typeNameIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(inputStream, 2));

@@ -6,19 +6,19 @@ import com.example.parser.types.constantPool.constants.strings.Utf8Constant;
 
 import java.util.List;
 
-public class RuntimeVisibleAnnotations extends AttributeBase {
+public class RuntimeInvisibleAnnotations extends AttributeBase {
 
     private Integer numAnnotations;
     private Annotations annotations;
 
-    public RuntimeVisibleAnnotations(Utf8Constant attributeName, Long attributeLength, Integer numAnnotations, Annotations annotations) {
+    public RuntimeInvisibleAnnotations(Utf8Constant attributeName, Long attributeLength, Integer numAnnotations, Annotations annotations) {
         this.attributeName = attributeName;
         this.attributeLength = attributeLength;
         this.numAnnotations = numAnnotations;
         this.annotations = annotations;
     }
 
-    public RuntimeVisibleAnnotations(Integer numAnnotations, Annotations attributes) {
+    public RuntimeInvisibleAnnotations(Integer numAnnotations, Annotations attributes) {
         super();
     }
 
