@@ -60,7 +60,7 @@ public class Jasm {
         ClassFile cf = null;
         try {
             cf = new ClassFileParser("Test.class").parse();
-            JasmBlocksParser.extractJasmBlocks(source, cf.getMethods().getJasmAnnotations());
+            JasmBlocksParser.extractJasmBlocks(source, cf.getMethods().getJasmAnnotationsPerMethod());
         } catch (AttributeDoesNotExistException e) {
             return Response.serverError().build();
         }

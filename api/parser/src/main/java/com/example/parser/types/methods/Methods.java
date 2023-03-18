@@ -2,6 +2,7 @@ package com.example.parser.types.methods;
 
 import com.example.parser.interfaces.ClassFileElement;
 import com.example.parser.types.attributes.util.types.annotations.Annotation;
+import com.example.parser.util.types.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,10 @@ public class Methods implements ClassFileElement {
 
     public List<Annotation> getJasmAnnotations() {
         return methods.stream().map(MethodInfo::getJasmAnnotation).filter(Objects::nonNull).collect(Collectors.toList());
+    }
+
+    public List<Pair<MethodInfo, Annotation>> getJasmAnnotationsPerMethod() {
+        return methods.stream().map(el -> new Pair<>(el, el.getJasmAnnotation())).filter(el -> el.getSecond() != null).collect(Collectors.toList());
     }
 
     public void addMethod(MethodInfo methodInfo) {

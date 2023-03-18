@@ -2,6 +2,7 @@ package com.example.insert.types;
 
 import com.example.parser.types.attributes.util.types.code.Arguments;
 import com.example.parser.types.attributes.util.types.code.Mnemonic;
+import com.example.parser.types.methods.MethodInfo;
 import com.example.parser.util.types.Pair;
 
 import java.util.List;
@@ -9,11 +10,13 @@ import java.util.List;
 public class JasmBlock {
     private Integer jasmBlockStartLine;
     private Integer jasmBlockEndLine;
+    private MethodInfo method;
     private List<Pair<Mnemonic, Arguments>> byteCode;
 
-    public JasmBlock(Integer jasmBlockStartLine, Integer jasmBlockEndLine, List<Pair<Mnemonic, Arguments>> byteCode) {
+    public JasmBlock(Integer jasmBlockStartLine, Integer jasmBlockEndLine, MethodInfo method, List<Pair<Mnemonic, Arguments>> byteCode) {
         this.jasmBlockStartLine = jasmBlockStartLine;
         this.jasmBlockEndLine = jasmBlockEndLine;
+        this.method = method;
         this.byteCode = byteCode;
     }
 
@@ -32,6 +35,14 @@ public class JasmBlock {
 
     public void setJasmBlockEndLine(Integer jasmBlockEndLine) {
         this.jasmBlockEndLine = jasmBlockEndLine;
+    }
+
+    public MethodInfo getMethod() {
+        return method;
+    }
+
+    public void setMethod(MethodInfo method) {
+        this.method = method;
     }
 
     public List<Pair<Mnemonic, Arguments>> getByteCode() {
