@@ -3,7 +3,7 @@ package com.example.parser.types.attributes.util.types.code;
 import com.example.parser.interfaces.ClassFileElement;
 import com.example.parser.util.types.Pair;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Code implements ClassFileElement {
@@ -11,7 +11,7 @@ public class Code implements ClassFileElement {
     private final List<Pair<Mnemonic, Arguments>> code;
 
     public Code() {
-        this.code = new ArrayList<>();
+        this.code = new LinkedList<>();
     }
 
     public List<Pair<Mnemonic, Arguments>> getCode() {

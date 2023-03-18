@@ -87,7 +87,7 @@ public class AttributeParser {
         Exceptions exceptions = AttributesUtil.parseExceptions(this.inputStream, this.constantPool, exceptionTableLength);
         Integer attributesCount = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
         Attributes attributes = new AttributeParser(attributesCount, this.inputStream, this.constantPool).parse();
-        return new CodeAttribute(attributeLength, maxStack, maxLocals, codeLength, code, exceptionTableLength,
+        return new CodeAttribute(attributeLength, attributeName, maxStack, maxLocals, codeLength, code, exceptionTableLength,
                 exceptions, attributesCount, attributes);
     }
 

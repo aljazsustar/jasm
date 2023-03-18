@@ -5,6 +5,7 @@ import com.example.parser.interfaces.AttributeBase;
 import com.example.parser.interfaces.ClassFileElement;
 import com.example.parser.interfaces.MethodBase;
 import com.example.parser.types.attributes.Attributes;
+import com.example.parser.types.attributes.criticalAttributes.CodeAttribute;
 import com.example.parser.types.attributes.optionalAttributes.RuntimeInvisibleAnnotations;
 import com.example.parser.types.attributes.util.types.annotations.Annotation;
 
@@ -30,6 +31,13 @@ public class MethodInfo extends MethodBase implements ClassFileElement {
         }
 
         return null;
+    }
+
+    public CodeAttribute getCodeAttribute() {
+        return (CodeAttribute) this.getAttributes().getAttributes().stream()
+                .filter(el -> el.getAttributeName().getValue().equals("Code"))
+                .findFirst()
+                .get();
     }
 
     @Override

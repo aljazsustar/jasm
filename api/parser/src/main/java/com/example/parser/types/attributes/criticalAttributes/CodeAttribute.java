@@ -4,6 +4,7 @@ import com.example.parser.interfaces.AttributeBase;
 import com.example.parser.types.attributes.Attributes;
 import com.example.parser.types.attributes.util.types.code.Code;
 import com.example.parser.types.attributes.util.types.code.Exceptions;
+import com.example.parser.types.constantPool.constants.strings.Utf8Constant;
 
 import java.util.List;
 
@@ -18,9 +19,10 @@ public class CodeAttribute extends AttributeBase {
     private Integer attributesCount;
     private Attributes attributes;
 
-    public CodeAttribute(Long attributeLength, Integer maxStack, Integer maxLocals, Long codeLength, Code code, Integer exceptionTableLength,
+    public CodeAttribute(Long attributeLength, Utf8Constant attributeName, Integer maxStack, Integer maxLocals, Long codeLength, Code code, Integer exceptionTableLength,
                          Exceptions exceptionTable, Integer attributesCount, Attributes attributes) {
         this.attributeLength = attributeLength;
+        this.attributeName = attributeName;
         this.maxStack = maxStack;
         this.maxLocals = maxLocals;
         this.codeLength = codeLength;

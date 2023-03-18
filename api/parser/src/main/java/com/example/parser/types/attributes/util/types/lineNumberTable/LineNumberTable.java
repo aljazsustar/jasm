@@ -21,6 +21,10 @@ public class LineNumberTable implements ClassFileElement {
         this.lineNumberTable.add(element);
     }
 
+    public List<LineNumberTableElement> getLineNumberTable() {
+        return lineNumberTable;
+    }
+
     @Override
     public List<Byte> toHex() {
         return null;
