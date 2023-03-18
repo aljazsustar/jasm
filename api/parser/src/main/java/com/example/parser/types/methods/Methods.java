@@ -1,9 +1,12 @@
 package com.example.parser.types.methods;
 
 import com.example.parser.interfaces.ClassFileElement;
+import com.example.parser.types.attributes.util.types.annotations.Annotation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Methods implements ClassFileElement {
 
@@ -15,6 +18,10 @@ public class Methods implements ClassFileElement {
 
     public Methods() {
         this.methods = new ArrayList<>();
+    }
+
+    public List<Annotation> getJasmAnnotations() {
+        return methods.stream().map(MethodInfo::getJasmAnnotation).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     public void addMethod(MethodInfo methodInfo) {

@@ -53,6 +53,10 @@
             <groupId>org.example</groupId>
             <artifactId>parser</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>insert</artifactId>
+        </dependency>
         <!--        <dependency>-->
         <!--            <groupId>com.kumuluz.ee.openapi</groupId>-->
         <!--            <artifactId>kumuluzee-openapi-mp</artifactId>-->

@@ -6,4 +6,12 @@ import com.example.parser.types.constantPool.constants.strings.Utf8Constant;
 public abstract class AttributeBase implements ClassFileElement {
     protected Utf8Constant attributeName;
     protected Long attributeLength;
+
+    public Utf8Constant getAttributeName() {
+        return attributeName;
+    }
+
+    public Long getAttributeLength() {
+        return attributeLength;
+    }
 }

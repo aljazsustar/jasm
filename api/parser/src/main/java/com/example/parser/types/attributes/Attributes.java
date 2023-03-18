@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Attributes implements ClassFileElement {
 
-    List<AttributeBase> attributes;
+    private List<AttributeBase> attributes;
 
     public Attributes() {
         this.attributes = new ArrayList<>();
@@ -24,6 +24,10 @@ public class Attributes implements ClassFileElement {
 
     public void add(AttributeBase attribute, Integer index) {
         this.attributes.add(index, attribute);
+    }
+
+    public List<AttributeBase> getAttributes() {
+        return attributes;
     }
 
     @Override
