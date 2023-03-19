@@ -49,6 +49,12 @@ public class JasmBlock {
         return byteCode;
     }
 
+    public Integer getByteCodeSize() {
+        return this.byteCode.stream()
+                .map(el -> 1 + el.getSecond().getArguments().size())
+                .reduce(0, Integer::sum);
+    }
+
     public void setByteCode(List<Pair<Mnemonic, Arguments>> byteCode) {
         this.byteCode = byteCode;
     }
