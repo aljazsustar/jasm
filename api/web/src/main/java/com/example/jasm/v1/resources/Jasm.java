@@ -6,6 +6,7 @@ import com.example.insert.types.JasmBlock;
 import com.example.parser.exceptions.AttributeDoesNotExistException;
 import com.example.parser.parsing.ClassFileParser;
 import com.example.parser.types.ClassFile;
+import com.example.parser.util.ParsingUtil;
 import com.kumuluz.ee.cors.annotations.CrossOrigin;
 
 import javax.annotation.security.PermitAll;
@@ -67,6 +68,7 @@ public class Jasm {
             cf = new ClassFileParser("Test.class").parse();
             List<JasmBlock> jasmBlocks = JasmBlocksParser.extractJasmBlocks(source, cf.getMethods().getJasmAnnotationsPerMethod());
             ByteCodeInserter.insertBytecode(jasmBlocks, cf);
+            ParsingUtil.printBytes(cf.writeBytes());
         } catch (AttributeDoesNotExistException e) {
             return Response.serverError().build();
         }

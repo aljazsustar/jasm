@@ -40,7 +40,7 @@ public class ParsingUtil {
 
     public static void printBytes(byte[] list) {
         for (byte b : list) {
-            System.out.println(b);
+            System.out.printf("%02X ", b);
         }
     }
 

@@ -18,7 +18,6 @@ public class ByteCodeInserter {
             Long currentCodeLength = jasmBlock.getMethod().getCodeAttribute().getCodeLength();
             jasmBlock.getMethod().getCodeAttribute().setCodeLength(currentCodeLength + jasmBlock.getByteCodeSize());
             jasmBlock.getMethod().getCodeAttribute().getCode().getCode().addAll(getInsertionIndex(jasmBlock), jasmBlock.getByteCode());
-            System.out.println(jasmBlock.getMethod().getCodeAttribute());
         }
     }
 

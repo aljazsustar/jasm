@@ -6,7 +6,10 @@ import com.example.parser.types.constantPool.constants.ClassConstant;
 import com.example.parser.types.fields.Fields;
 import com.example.parser.types.interfaces.Interfaces;
 import com.example.parser.types.methods.Methods;
+import com.example.parser.util.WritingUtil;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 public class ClassFile {
     private Long magic;
@@ -158,5 +161,17 @@ public class ClassFile {
     public String toString() {
         Gson gson = new Gson();
         return gson.toJson(this);
+    }
+
+    public byte[] writeBytes() {
+        // we don't immediately know, how long the input file is, so we initially construct an arraylist and then convert
+        // it to primitive array
+        ArrayList<Byte> tmp = new ArrayList<>();
+        tmp.addAll(WritingUtil.writeBytes(this.magic, 4));
+        tmp.addAll(WritingUtil.writeBytes(this.minor_version, 2));
+        tmp.addAll(WritingUtil.writeBytes(this.major_version, 2));
+        tmp.addAll(WritingUtil.writeBytes(this.constant_pool_count, 2));
+
+        return WritingUtil.objectByteListToPrimitiveArray(tmp);
     }
 }
