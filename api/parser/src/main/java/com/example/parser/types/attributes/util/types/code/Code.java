@@ -30,10 +30,10 @@ public class Code implements ClassFileElement {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("[");
+        sb.append("[\n");
 
         for (Pair<Mnemonic, Arguments> command : this.code) {
-            sb.append(" ").append(command).append(", ");
+            sb.append(" ").append(command).append(",\n");
         }
 
         sb.append("]");

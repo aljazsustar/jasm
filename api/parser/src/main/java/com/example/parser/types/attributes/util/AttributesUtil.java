@@ -27,7 +27,8 @@ public class AttributesUtil {
             Mnemonic mnemonic = new Mnemonic(mnemonics.getOpcodeByMnemonic(command.getFirst()).getFirst(), command.getFirst());
             Arguments commandArgs = new Arguments();
             // TODO: this does not handle multiple arguments
-            commandArgs.addArgument(ParsingUtil.bytesToInt(ParsingUtil.readNBytes(inputStream, command.getSecond())));
+            if (command.getSecond() != 0)
+                commandArgs.addArgument(ParsingUtil.bytesToInt(ParsingUtil.readNBytes(inputStream, command.getSecond())));
             i += command.getSecond();
             code.addCommand(new Pair<>(mnemonic, commandArgs));
         }

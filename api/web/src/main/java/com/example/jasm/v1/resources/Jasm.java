@@ -38,16 +38,18 @@ public class Jasm {
             "      }\n" +
             "     \n" +
             "      @Jasm({@Block(\n" +
-            "      start = 16,\n" +
-            "      end = 20\n" +
+            "      start = 18,\n" +
+            "      end = 22\n" +
             "   )})\n" +
-            "      public static void f() {" +
+            "      public static int f() {\n" +
+            "      int a = 5;\n" +
+            "      int b = 10;\n" +
             "      /*\n" +
             "       bipush 4\n" +
             "       bipush 2\n" +
             "       iadd\n" +
             "       ireturn\n" +
-            "       iadd\n " +
+            "       return a + b; \n" +
             "}" +
             "}";
 

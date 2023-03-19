@@ -4,7 +4,10 @@ import com.example.insert.types.JasmBlock;
 import com.example.parser.types.ClassFile;
 import com.example.parser.types.attributes.criticalAttributes.CodeAttribute;
 import com.example.parser.types.attributes.usefulAttributes.LineNumberTableAttribute;
+import com.example.parser.types.attributes.util.types.code.Arguments;
+import com.example.parser.types.attributes.util.types.code.Mnemonic;
 import com.example.parser.types.attributes.util.types.lineNumberTable.LineNumberTableElement;
+import com.example.parser.util.types.Pair;
 
 import java.util.List;
 
@@ -32,13 +35,28 @@ public class ByteCodeInserter {
                 .findFirst()
                 .get();
 
+        // first we find the pcStart in the linNumberTable attribute
+        Integer lineNumberTableIndex = 0;
         for (LineNumberTableElement lineNumberTableElement : lineNumberTableAttribute.getLineNumberTable().getLineNumberTable()) {
-            if (lineNumberTableElement.getLineNumber().intValue() == jasmBlock.getJasmBlockStartLine()) {
-                return lineNumberTableElement.getStartPc() + 1;
-            }
             if (lineNumberTableElement.getLineNumber() > jasmBlock.getJasmBlockEndLine()) {
-                return lineNumberTableElement.getStartPc();
+                lineNumberTableIndex = lineNumberTableElement.getStartPc();
             }
+        }
+
+        // because PC also includes sizes of arguments, the mapping between codeAttribute and lineNumberTableAttribute
+        // isn't exactly 1:1. We get the index of the insertion by counting the counter (number of bytes encountered (mnemonic + args))
+        // by the 1 + size of args, while simultaneously incrementing codeTableIndex, which the actual index at which we
+        // insert the code into the Code attribute
+        Integer codeTableIndex = 0;
+        Integer counter = 0;
+
+        for (Pair<Mnemonic, Arguments> command : codeAttribute.getCode().getCode()) {
+
+            if (counter.equals(lineNumberTableIndex)) {
+                return codeTableIndex;
+            }
+            counter += 1 + command.getSecond().getArguments().size();
+            codeTableIndex++;
         }
         return -1;
     }
