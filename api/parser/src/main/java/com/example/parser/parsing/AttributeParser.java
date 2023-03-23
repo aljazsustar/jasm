@@ -44,16 +44,17 @@ public class AttributeParser {
     }
 
     private AttributeBase parseAttribute() throws AttributeDoesNotExistException {
-        Utf8Constant attributeName = (Utf8Constant) this.constantPool.getConstantPoolElement(ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2)) - 1);
+        Integer attributeNameIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
+        Utf8Constant attributeName = (Utf8Constant) this.constantPool.getConstantPoolElement(attributeNameIndex - 1);
         switch (attributeName.getValue()) {
             case "ConstantValue":
-                return this.parseConstantValueAttribute(attributeName);
+                return this.parseConstantValueAttribute(attributeNameIndex, attributeName);
             case "Code":
-                return this.parseCodeAttribute(attributeName);
+                return this.parseCodeAttribute(attributeNameIndex, attributeName);
             case "LineNumberTable":
                 return this.parseLineNumberTableAttribute(attributeName);
             case "SourceFile":
-                return this.parseSourceFileAttribute(attributeName);
+                return this.parseSourceFileAttribute(attributeNameIndex, attributeName);
             case "StackMapTable":
                 return this.parseStackMapTableAttribute(attributeName);
             case "Exceptions":
@@ -69,15 +70,15 @@ public class AttributeParser {
         throw new AttributeDoesNotExistException();
     }
 
-    private ConstantValueAttribute parseConstantValueAttribute(Utf8Constant attributeName) {
+    private ConstantValueAttribute parseConstantValueAttribute(Integer attributeNameIndex, Utf8Constant attributeName) {
         Long attributeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
         Integer constantValueIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
-        ConstantValueAttribute constantValueAttribute = new ConstantValueAttribute(attributeName, attributeLength, constantValueIndex);
+        ConstantValueAttribute constantValueAttribute = new ConstantValueAttribute(attributeNameIndex, attributeName, attributeLength, constantValueIndex);
         constantValueAttribute.setConstantValue((ConstantValue) this.constantPool.getConstantPoolElement(constantValueIndex - 1));
         return constantValueAttribute;
     }
 
-    private CodeAttribute parseCodeAttribute(Utf8Constant attributeName) throws AttributeDoesNotExistException {
+    private CodeAttribute parseCodeAttribute(Integer attributeNameIndex, Utf8Constant attributeName) throws AttributeDoesNotExistException {
         Long attributeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
         Integer maxStack = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
         Integer maxLocals = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
@@ -87,7 +88,7 @@ public class AttributeParser {
         Exceptions exceptions = AttributesUtil.parseExceptions(this.inputStream, this.constantPool, exceptionTableLength);
         Integer attributesCount = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
         Attributes attributes = new AttributeParser(attributesCount, this.inputStream, this.constantPool).parse();
-        return new CodeAttribute(attributeLength, attributeName, maxStack, maxLocals, codeLength, code, exceptionTableLength,
+        return new CodeAttribute(attributeNameIndex, attributeLength, attributeName, maxStack, maxLocals, codeLength, code, exceptionTableLength,
                 exceptions, attributesCount, attributes);
     }
 
@@ -98,11 +99,11 @@ public class AttributeParser {
         return new LineNumberTableAttribute(attributeName, attributeLength, lineNumberTableLength, lineNumberTable);
     }
 
-    private SourceFileAttribute parseSourceFileAttribute(Utf8Constant attributeName) {
+    private SourceFileAttribute parseSourceFileAttribute(Integer attributeNameIndex, Utf8Constant attributeName) {
         Long attributeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
         Integer nameConstantPoolIndex = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
         Utf8Constant sourceFileName = (Utf8Constant) this.constantPool.getConstantPoolElement(nameConstantPoolIndex - 1);
-        return new SourceFileAttribute(attributeName, attributeLength, nameConstantPoolIndex, sourceFileName);
+        return new SourceFileAttribute(attributeNameIndex, attributeName, attributeLength, nameConstantPoolIndex, sourceFileName);
     }
 
     private StackMapTableAttribute parseStackMapTableAttribute(Utf8Constant attributeNane) {

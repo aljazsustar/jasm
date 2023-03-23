@@ -24,7 +24,13 @@ public class Interfaces implements ClassFileElement {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        return this.interfaces
+                .stream()
+                .map(ClassConstant::toHex)
+                .reduce(new ArrayList<>(), (acc, el) -> {
+                    acc.addAll(el);
+                    return acc;
+                });
     }
 
     @Override

@@ -5,7 +5,9 @@ import com.example.parser.types.attributes.Attributes;
 import com.example.parser.types.attributes.util.types.code.Code;
 import com.example.parser.types.attributes.util.types.code.Exceptions;
 import com.example.parser.types.constantPool.constants.strings.Utf8Constant;
+import com.example.parser.util.WritingUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CodeAttribute extends AttributeBase {
@@ -19,8 +21,9 @@ public class CodeAttribute extends AttributeBase {
     private Integer attributesCount;
     private Attributes attributes;
 
-    public CodeAttribute(Long attributeLength, Utf8Constant attributeName, Integer maxStack, Integer maxLocals, Long codeLength, Code code, Integer exceptionTableLength,
+    public CodeAttribute(Integer attributeNameIndex, Long attributeLength, Utf8Constant attributeName, Integer maxStack, Integer maxLocals, Long codeLength, Code code, Integer exceptionTableLength,
                          Exceptions exceptionTable, Integer attributesCount, Attributes attributes) {
+        this.attributeNameIndex = attributeNameIndex;
         this.attributeLength = attributeLength;
         this.attributeName = attributeName;
         this.maxStack = maxStack;
@@ -35,7 +38,18 @@ public class CodeAttribute extends AttributeBase {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        List<Byte> bytes = new ArrayList<>();
+        bytes.addAll(WritingUtil.writeBytes(this.attributeNameIndex, 2));
+        bytes.addAll(WritingUtil.writeBytes(this.attributeLength, 4));
+        bytes.addAll(WritingUtil.writeBytes(this.maxStack, 2));
+        bytes.addAll(WritingUtil.writeBytes(this.maxLocals, 2));
+        bytes.addAll(WritingUtil.writeBytes(this.codeLength, 4));
+        bytes.addAll(this.code.toHex());
+        bytes.addAll(WritingUtil.writeBytes(this.exceptionTableLength, 2));
+        bytes.addAll(this.exceptionTable.toHex());
+        bytes.addAll(WritingUtil.writeBytes(this.attributeLength, 2));
+        bytes.addAll(this.attributes.toHex());
+        return bytes;
     }
 
     public Integer getMaxStack() {

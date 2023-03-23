@@ -5,8 +5,10 @@ import java.util.Set;
 
 public class AccessFlags {
     private final HashMap<String, Integer> accessFlags;
+    private final Integer intValue;
 
     public AccessFlags(Integer rawAccessFlags) {
+        this.intValue = rawAccessFlags;
         this.accessFlags = new HashMap<>();
         AccessFlagsDef.getAccessFlags().forEach((key, value) -> {
             if ((value & rawAccessFlags) != 0)
@@ -20,6 +22,10 @@ public class AccessFlags {
 
     public Set<String> getAccessFlagsList() {
         return this.accessFlags.keySet();
+    }
+
+    public Integer getIntValue() {
+        return intValue;
     }
 
     @Override

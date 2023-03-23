@@ -172,6 +172,13 @@ public class ClassFile {
         tmp.addAll(WritingUtil.writeBytes(this.major_version, 2));
         tmp.addAll(WritingUtil.writeBytes(this.constant_pool_count, 2));
         tmp.addAll(this.constant_pool.toHex());
+        tmp.addAll(WritingUtil.writeBytes(this.access_flags, 2));
+        tmp.addAll(WritingUtil.writeBytes(this.this_class.getConstantPoolIndex() + 1, 2));
+        tmp.addAll(WritingUtil.writeBytes(this.super_class.getConstantPoolIndex() + 1, 2));
+        tmp.addAll(WritingUtil.writeBytes(this.interfaces_count, 2));
+        tmp.addAll(this.interfaces.toHex());
+        tmp.addAll(WritingUtil.writeBytes(this.fields_count, 2));
+        tmp.addAll(this.fields.toHex());
         return WritingUtil.objectByteListToPrimitiveArray(tmp);
     }
 }

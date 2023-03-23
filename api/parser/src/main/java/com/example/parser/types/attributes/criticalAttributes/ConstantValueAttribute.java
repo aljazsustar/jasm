@@ -3,16 +3,18 @@ package com.example.parser.types.attributes.criticalAttributes;
 import com.example.parser.interfaces.AttributeBase;
 import com.example.parser.interfaces.ConstantValue;
 import com.example.parser.types.constantPool.constants.strings.Utf8Constant;
+import com.example.parser.util.WritingUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConstantValueAttribute extends AttributeBase {
 
-    private Integer attributeNameIndex;
     private Integer constantValueIndex;
     private ConstantValue constantValue;
 
-    public ConstantValueAttribute(Utf8Constant attributeName, Long attributeLength, Integer constantValueIndex) {
+    public ConstantValueAttribute(Integer attributeNameIndex, Utf8Constant attributeName, Long attributeLength, Integer constantValueIndex) {
+        this.attributeNameIndex = attributeNameIndex;
         this.attributeName = attributeName;
         this.attributeLength = attributeLength;
         this.constantValueIndex = constantValueIndex;
@@ -20,7 +22,11 @@ public class ConstantValueAttribute extends AttributeBase {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        List<Byte> bytes = new ArrayList<>();
+        bytes.addAll(WritingUtil.writeBytes(this.attributeNameIndex, 2));
+        bytes.addAll(WritingUtil.writeBytes(this.attributeLength, 4));
+        bytes.addAll(WritingUtil.writeBytes(this.constantValueIndex, 2));
+        return bytes;
     }
 
     public Integer getAttributeNameIndex() {

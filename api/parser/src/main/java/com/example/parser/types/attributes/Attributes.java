@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Attributes implements ClassFileElement {
 
-    private List<AttributeBase> attributes;
+    private final List<AttributeBase> attributes;
 
     public Attributes() {
         this.attributes = new ArrayList<>();
@@ -32,7 +32,13 @@ public class Attributes implements ClassFileElement {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        return this.attributes
+                .stream()
+                .map(AttributeBase::toHex)
+                .reduce(new ArrayList<>(), (acc, el) -> {
+                    acc.addAll(el);
+                    return acc;
+                });
     }
 
     @Override

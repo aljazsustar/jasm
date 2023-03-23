@@ -3,6 +3,7 @@ package com.example.parser.types.attributes.util.types.code;
 import com.example.parser.interfaces.ClassFileElement;
 import com.example.parser.util.types.Pair;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,7 +25,12 @@ public class Code implements ClassFileElement {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        List<Byte> bytes = new ArrayList<>();
+        for (Pair<Mnemonic, Arguments> code : this.code) {
+            bytes.addAll(code.getFirst().toHex());
+            bytes.addAll(code.getSecond().toHex());
+        }
+        return bytes;
     }
 
     @Override

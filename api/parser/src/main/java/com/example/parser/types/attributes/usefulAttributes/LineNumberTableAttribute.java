@@ -3,7 +3,9 @@ package com.example.parser.types.attributes.usefulAttributes;
 import com.example.parser.interfaces.AttributeBase;
 import com.example.parser.types.attributes.util.types.lineNumberTable.LineNumberTable;
 import com.example.parser.types.constantPool.constants.strings.Utf8Constant;
+import com.example.parser.util.WritingUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LineNumberTableAttribute extends AttributeBase {
@@ -36,7 +38,12 @@ public class LineNumberTableAttribute extends AttributeBase {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        List<Byte> bytes = new ArrayList<>();
+        bytes.addAll(WritingUtil.writeBytes(this.attributeNameIndex, 2));
+        bytes.addAll(WritingUtil.writeBytes(this.attributeLength, 4));
+        bytes.addAll(WritingUtil.writeBytes(this.lineNumberTableLength, 2));
+        bytes.addAll(this.lineNumberTable.toHex());
+        return bytes;
     }
 
     @Override

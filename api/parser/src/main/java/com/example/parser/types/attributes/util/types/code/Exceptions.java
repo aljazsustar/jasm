@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Exceptions implements ClassFileElement {
 
-    private List<Exception> exceptions;
+    private final List<Exception> exceptions;
 
     public Exceptions() {
         this.exceptions = new ArrayList<>();
@@ -24,7 +24,13 @@ public class Exceptions implements ClassFileElement {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        return this.exceptions
+                .stream()
+                .map(ClassFileElement::toHex)
+                .reduce(new ArrayList<>(), (acc, el) -> {
+                    acc.addAll(el);
+                    return acc;
+                });
     }
 
     @Override

@@ -27,7 +27,13 @@ public class LineNumberTable implements ClassFileElement {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        return this.lineNumberTable
+                .stream()
+                .map(LineNumberTableElement::toHex)
+                .reduce(new ArrayList<>(), (acc, el) -> {
+                    acc.addAll(el);
+                    return acc;
+                });
     }
 
     @Override

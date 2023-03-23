@@ -2,7 +2,9 @@ package com.example.parser.types.attributes.usefulAttributes;
 
 import com.example.parser.interfaces.AttributeBase;
 import com.example.parser.types.constantPool.constants.strings.Utf8Constant;
+import com.example.parser.util.WritingUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SourceFileAttribute extends AttributeBase {
@@ -10,7 +12,8 @@ public class SourceFileAttribute extends AttributeBase {
     private Integer sourceFileIndex;
     private Utf8Constant sourceFileName;
 
-    public SourceFileAttribute(Utf8Constant attributeName, Long attributeLength, Integer sourceFileIndex, Utf8Constant sourceFileName) {
+    public SourceFileAttribute(Integer attributeNameIndex, Utf8Constant attributeName, Long attributeLength, Integer sourceFileIndex, Utf8Constant sourceFileName) {
+        this.attributeNameIndex = attributeNameIndex;
         this.sourceFileIndex = sourceFileIndex;
         this.sourceFileName = sourceFileName;
         this.attributeName = attributeName;
@@ -36,7 +39,11 @@ public class SourceFileAttribute extends AttributeBase {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        List<Byte> bytes = new ArrayList<>();
+        bytes.addAll(WritingUtil.writeBytes(this.attributeNameIndex, 2));
+        bytes.addAll(WritingUtil.writeBytes(this.attributeLength, 4));
+        bytes.addAll(WritingUtil.writeBytes(this.sourceFileIndex, 2));
+        return bytes;
     }
 
     @Override

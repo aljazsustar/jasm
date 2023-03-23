@@ -2,7 +2,9 @@ package com.example.parser.types.attributes.util.types.code;
 
 import com.example.parser.interfaces.ClassFileElement;
 import com.example.parser.types.constantPool.constants.ClassConstant;
+import com.example.parser.util.WritingUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Exception implements ClassFileElement {
@@ -63,7 +65,12 @@ public class Exception implements ClassFileElement {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        List<Byte> bytes = new ArrayList<>();
+        bytes.addAll(WritingUtil.writeBytes(this.startPc, 2));
+        bytes.addAll(WritingUtil.writeBytes(this.endPc, 2));
+        bytes.addAll(WritingUtil.writeBytes(this.handlerPc, 2));
+        bytes.addAll(WritingUtil.writeBytes(this.catchTypeIndex, 2));
+        return bytes;
     }
 
     @Override

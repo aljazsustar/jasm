@@ -19,7 +19,13 @@ public class Fields implements ClassFileElement {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        return this.fields
+                .stream()
+                .map(ClassFileElement::toHex)
+                .reduce(new ArrayList<>(), (acc, el) -> {
+                    acc.addAll(el);
+                    return acc;
+                });
     }
 
     public List<FieldInfo> getFields() {

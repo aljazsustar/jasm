@@ -1,7 +1,9 @@
 package com.example.parser.types.attributes.util.types.lineNumberTable;
 
 import com.example.parser.interfaces.ClassFileElement;
+import com.example.parser.util.WritingUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LineNumberTableElement implements ClassFileElement {
@@ -40,6 +42,9 @@ public class LineNumberTableElement implements ClassFileElement {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        List<Byte> bytes = new ArrayList<>();
+        bytes.addAll(WritingUtil.writeBytes(this.startPc, 2));
+        bytes.addAll(WritingUtil.writeBytes(this.lineNumber, 2));
+        return bytes;
     }
 }
