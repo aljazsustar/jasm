@@ -4,7 +4,9 @@ import com.example.parser.enums.ConstantPoolTags;
 import com.example.parser.interfaces.ClassFileElement;
 import com.example.parser.interfaces.ConstantPoolElement;
 import com.example.parser.interfaces.ConstantValue;
+import com.example.parser.util.WritingUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FloatConstant extends ConstantPoolElement implements ClassFileElement, ConstantValue {
@@ -18,7 +20,10 @@ public class FloatConstant extends ConstantPoolElement implements ClassFileEleme
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        List<Byte> bytes = new ArrayList<>();
+        bytes.addAll(WritingUtil.writeBytes(this.tag, 1));
+        bytes.addAll(WritingUtil.writeBytes(this.value, 4));
+        return bytes;
     }
 
     public Float getValue() {

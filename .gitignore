@@ -1,5 +1,5 @@
 api/.idea
-api/*.class*
+api/*.class
 api/target
 api/.token
 api/jasm-insert/target

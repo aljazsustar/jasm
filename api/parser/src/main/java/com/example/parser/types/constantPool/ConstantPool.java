@@ -15,7 +15,16 @@ public class ConstantPool implements ClassFileElement {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        return this.elements
+                .stream()
+                .map(el -> {
+                    if (el != null) return el.toHex();
+                    else return new ArrayList<Byte>();
+                })
+                .reduce(new ArrayList<>(), (acc, el) -> {
+                    acc.addAll(el);
+                    return acc;
+                });
     }
 
     public void addToConstantPool(ConstantPoolElement element) {

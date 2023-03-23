@@ -65,7 +65,7 @@ public class Jasm {
 
         ClassFile cf = null;
         try {
-            cf = new ClassFileParser("Test.class").parse();
+            cf = new ClassFileParser("MinExample.class").parse();
             List<JasmBlock> jasmBlocks = JasmBlocksParser.extractJasmBlocks(source, cf.getMethods().getJasmAnnotationsPerMethod());
             ByteCodeInserter.insertBytecode(jasmBlocks, cf);
             ParsingUtil.printBytes(cf.writeBytes());

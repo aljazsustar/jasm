@@ -5,7 +5,9 @@ import com.example.parser.interfaces.ClassFileElement;
 import com.example.parser.interfaces.ConstantPoolElement;
 import com.example.parser.types.constantPool.constants.ClassConstant;
 import com.example.parser.types.constantPool.constants.NameAndTypeConstant;
+import com.example.parser.util.WritingUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MethodRefConstant extends ConstantPoolElement implements ClassFileElement {
@@ -22,7 +24,11 @@ public class MethodRefConstant extends ConstantPoolElement implements ClassFileE
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        List<Byte> bytes = new ArrayList<>();
+        bytes.addAll(WritingUtil.writeBytes(this.tag, 1));
+        bytes.addAll(WritingUtil.writeBytes(this.classConstantIndex, 2));
+        bytes.addAll(WritingUtil.writeBytes(this.nameAndTypeIndex, 2));
+        return bytes;
     }
 
     public NameAndTypeConstant getNameAndTypeConstant() {

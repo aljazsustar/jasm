@@ -28,12 +28,17 @@ public class WritingUtil {
         return primitiveToObjectByteList(result);
     }
 
-    public static byte[] writeBytes(Float value, Integer length) {
-        return ByteBuffer.allocate(length).putFloat(value).array();
+    public static List<Byte> writeBytes(Float value, Integer length) {
+        return primitiveToObjectByteList(ByteBuffer.allocate(length).putFloat(value).array());
     }
 
-    public static byte[] writeBytes(Double value, Integer length) {
-        return ByteBuffer.allocate(length).putDouble(value).array();
+    public static List<Byte> writeBytes(Double value, Integer length) {
+        byte[] result = new byte[length];
+        Long longBits = Double.doubleToLongBits(value);
+        for (int i = 0; i < 8; i++) {
+            result[i] = (byte) ((longBits >> ((7 - i) * 8)) & 0xff);
+        }
+        return primitiveToObjectByteList(result);
     }
 
     public static ArrayList<Byte> primitiveToObjectByteList(byte[] bytes) {

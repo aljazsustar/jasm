@@ -171,7 +171,7 @@ public class ClassFile {
         tmp.addAll(WritingUtil.writeBytes(this.minor_version, 2));
         tmp.addAll(WritingUtil.writeBytes(this.major_version, 2));
         tmp.addAll(WritingUtil.writeBytes(this.constant_pool_count, 2));
-
+        tmp.addAll(this.constant_pool.toHex());
         return WritingUtil.objectByteListToPrimitiveArray(tmp);
     }
 }
