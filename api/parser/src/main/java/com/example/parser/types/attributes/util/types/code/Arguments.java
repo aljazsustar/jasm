@@ -1,6 +1,7 @@
 package com.example.parser.types.attributes.util.types.code;
 
 import com.example.parser.interfaces.ClassFileElement;
+import com.example.parser.util.WritingUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,12 @@ public class Arguments implements ClassFileElement {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        return this.arguments
+                .stream()
+                .map(el -> WritingUtil.writeBytes(el, 2))
+                .reduce(new ArrayList<>(), (acc, el) -> {
+                    acc.addAll(el);
+                    return acc;
+                });
     }
 }

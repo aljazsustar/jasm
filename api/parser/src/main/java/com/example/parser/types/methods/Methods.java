@@ -39,7 +39,13 @@ public class Methods implements ClassFileElement {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        return this.methods
+                .stream()
+                .map(ClassFileElement::toHex)
+                .reduce(new ArrayList<>(), (acc, el) -> {
+                    acc.addAll(el);
+                    return acc;
+                });
     }
 
     public List<MethodInfo> getMethods() {

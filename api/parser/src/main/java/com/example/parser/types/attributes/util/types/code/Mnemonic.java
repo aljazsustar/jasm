@@ -1,7 +1,9 @@
 package com.example.parser.types.attributes.util.types.code;
 
 import com.example.parser.interfaces.ClassFileElement;
+import com.example.parser.util.WritingUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Mnemonic implements ClassFileElement {
@@ -31,7 +33,7 @@ public class Mnemonic implements ClassFileElement {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        return new ArrayList<>(WritingUtil.writeBytes(this.opcode, 1));
     }
 
     @Override

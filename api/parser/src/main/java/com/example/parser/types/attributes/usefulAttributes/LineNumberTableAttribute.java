@@ -13,7 +13,8 @@ public class LineNumberTableAttribute extends AttributeBase {
     private LineNumberTable lineNumberTable;
     private Integer lineNumberTableLength;
 
-    public LineNumberTableAttribute(Utf8Constant attributeName, Long attributeLength, Integer lineNumberTableLength, LineNumberTable lineNumberTable) {
+    public LineNumberTableAttribute(Integer attributeNameIndex, Utf8Constant attributeName, Long attributeLength, Integer lineNumberTableLength, LineNumberTable lineNumberTable) {
+        this.attributeNameIndex = attributeNameIndex;
         this.attributeName = attributeName;
         this.attributeLength = attributeLength;
         this.lineNumberTableLength = lineNumberTableLength;

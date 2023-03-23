@@ -52,7 +52,7 @@ public class AttributeParser {
             case "Code":
                 return this.parseCodeAttribute(attributeNameIndex, attributeName);
             case "LineNumberTable":
-                return this.parseLineNumberTableAttribute(attributeName);
+                return this.parseLineNumberTableAttribute(attributeNameIndex, attributeName);
             case "SourceFile":
                 return this.parseSourceFileAttribute(attributeNameIndex, attributeName);
             case "StackMapTable":
@@ -92,11 +92,11 @@ public class AttributeParser {
                 exceptions, attributesCount, attributes);
     }
 
-    private LineNumberTableAttribute parseLineNumberTableAttribute(Utf8Constant attributeName) {
+    private LineNumberTableAttribute parseLineNumberTableAttribute(Integer attributeNameIndex, Utf8Constant attributeName) {
         Long attributeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
         Integer lineNumberTableLength = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
         LineNumberTable lineNumberTable = AttributesUtil.parseLineNumberTable(this.inputStream, lineNumberTableLength);
-        return new LineNumberTableAttribute(attributeName, attributeLength, lineNumberTableLength, lineNumberTable);
+        return new LineNumberTableAttribute(attributeNameIndex, attributeName, attributeLength, lineNumberTableLength, lineNumberTable);
     }
 
     private SourceFileAttribute parseSourceFileAttribute(Integer attributeNameIndex, Utf8Constant attributeName) {

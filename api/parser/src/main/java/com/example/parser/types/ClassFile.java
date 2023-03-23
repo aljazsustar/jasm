@@ -179,6 +179,10 @@ public class ClassFile {
         tmp.addAll(this.interfaces.toHex());
         tmp.addAll(WritingUtil.writeBytes(this.fields_count, 2));
         tmp.addAll(this.fields.toHex());
+        tmp.addAll(WritingUtil.writeBytes(this.methods_count, 2));
+        tmp.addAll(this.methods.toHex());
+        tmp.addAll(WritingUtil.writeBytes(this.attributes_count, 2));
+        tmp.addAll(this.attributes.toHex());
         return WritingUtil.objectByteListToPrimitiveArray(tmp);
     }
 }

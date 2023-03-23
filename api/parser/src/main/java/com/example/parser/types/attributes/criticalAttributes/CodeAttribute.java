@@ -47,7 +47,7 @@ public class CodeAttribute extends AttributeBase {
         bytes.addAll(this.code.toHex());
         bytes.addAll(WritingUtil.writeBytes(this.exceptionTableLength, 2));
         bytes.addAll(this.exceptionTable.toHex());
-        bytes.addAll(WritingUtil.writeBytes(this.attributeLength, 2));
+        bytes.addAll(WritingUtil.writeBytes(this.attributesCount, 2));
         bytes.addAll(this.attributes.toHex());
         return bytes;
     }
