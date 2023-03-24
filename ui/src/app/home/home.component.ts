@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.apiService.compileSource().subscribe(res => console.log(res));
+    this.apiService.compileSource().subscribe(res => console.log(res.classFile));
   }
 
   onCompile() {

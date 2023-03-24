@@ -11,7 +11,6 @@ import com.example.parser.types.ClassFile;
 import com.example.parser.util.InMemoryFileManager;
 import com.example.parser.util.InvocationOutputStream;
 import com.example.parser.util.JavaSourceFromString;
-import com.kumuluz.ee.cors.annotations.CrossOrigin;
 
 import javax.annotation.security.PermitAll;
 import javax.enterprise.context.RequestScoped;
@@ -41,18 +40,16 @@ import java.util.logging.Logger;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.TEXT_PLAIN)
 @RequestScoped
-@CrossOrigin
 public class Jasm {
-
-    String className = "Main";
 
     @Context
     protected UriInfo uriInfo;
+    String className = "Main";
 
     @POST
     @Path("getInfo")
     @PermitAll
-    @CrossOrigin
+    @RequestScoped
     public Response getInfo(String content) {
 
         Result res;
@@ -84,13 +81,10 @@ public class Jasm {
         boolean result = task.call();
 
         PipedInputStream in = new PipedInputStream();
-        new Thread(() -> {
-            try (final PipedOutputStream out = new PipedOutputStream(in)) {
-                manager.getBytesMap().get(className).openOutputStream().writeTo(out);
-            } catch (IOException e) {
-                // logging and exception handling should go here
-            }
-        }).start();
+        try (final PipedOutputStream out = new PipedOutputStream(in)) {
+            manager.getBytesMap().get(className).openOutputStream().writeTo(out);
+        } catch (IOException e) {
+        }
 
         ClassFile cf = new ClassFileParser(new BufferedInputStream(in)).parse();
         List<JasmBlock> jasmBlocks = JasmBlocksParser.extractJasmBlocks(source, cf.getMethods().getJasmAnnotationsPerMethod());
@@ -107,13 +101,16 @@ public class Jasm {
             PrintStream out = System.out;
             System.setOut(new PrintStream(invocationOutputStream));
             Class<?> clazz = classLoader.loadClass(className);
-            Method m = clazz.getMethod(className, String[].class);
+            Method m = clazz.getMethod("main", String[].class);
             m.invoke(null, (Object) null);
             String s = invocationOutputStream.getAndClear();
             res.setExecutionResult(new ExecutionResult(s));
             System.setOut(out);
+            out.flush();
+            out.close();
             System.setOut(invocationOutputStream.getOriginal());
         }
+        in.close();
         res.setClassFile(cf);
         return res;
     }
