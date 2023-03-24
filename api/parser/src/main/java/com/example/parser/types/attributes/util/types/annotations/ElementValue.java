@@ -35,7 +35,7 @@ public class ElementValue<T extends ElementValueType> implements ClassFileElemen
     @Override
     public List<Byte> toHex() {
         List<Byte> bytes = new ArrayList<>();
-        bytes.addAll(WritingUtil.writeBytes(Character.getNumericValue(this.tag), 1));
+        bytes.addAll(WritingUtil.writeBytes((int) this.tag, 1));
         bytes.addAll(this.value.toHex());
         return bytes;
     }

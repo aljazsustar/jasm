@@ -46,6 +46,7 @@ public class RuntimeInvisibleAnnotations extends AttributeBase {
         List<Byte> bytes = new ArrayList<>();
         bytes.addAll(WritingUtil.writeBytes(this.attributeNameIndex, 2));
         bytes.addAll(WritingUtil.writeBytes(this.attributeLength, 4));
+        bytes.addAll(WritingUtil.writeBytes(this.numAnnotations, 2));
         bytes.addAll(this.annotations.toHex());
         return bytes;
     }
