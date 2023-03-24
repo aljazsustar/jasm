@@ -15,4 +15,8 @@ public abstract class AttributeBase implements ClassFileElement {
     public Long getAttributeLength() {
         return attributeLength;
     }
+
+    public void setAttributeLength(Long attributeLength) {
+        this.attributeLength = attributeLength;
+    }
 }

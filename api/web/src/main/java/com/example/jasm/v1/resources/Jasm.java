@@ -1,5 +1,8 @@
 package com.example.jasm.v1.resources;
 
+import com.example.insert.ByteCodeInserter;
+import com.example.insert.JasmBlocksParser;
+import com.example.insert.types.JasmBlock;
 import com.example.parser.exceptions.AttributeDoesNotExistException;
 import com.example.parser.parsing.ClassFileParser;
 import com.example.parser.types.ClassFile;
@@ -19,6 +22,7 @@ import javax.ws.rs.core.UriInfo;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 @Path("compile")
 @Produces(MediaType.APPLICATION_JSON)
@@ -28,29 +32,26 @@ import java.io.IOException;
 public class Jasm {
 
     String source = "import com.example.insert.annotations.Block;\n" +
-            "   import com.example.insert.annotations.Jasm;\n" +
-            "  \n" +
-            "   public class Test {\n" +
-            "      public Test() {\n" +
-            "      }\n" +
-            "     \n" +
-            "      public static void main(String[] var0) {\n" +
-            "      }\n" +
-            "     \n" +
-            "      @Jasm({@Block(\n" +
-            "      start = 18,\n" +
-            "      end = 22\n" +
-            "   )})\n" +
-            "      public static int f() {\n" +
-            "      int a = 5;\n" +
-            "      int b = 10;\n" +
-            "      /*\n" +
-            "       bipush 4\n" +
-            "       bipush 2\n" +
-            "       iadd\n" +
-            "       ireturn\n" +
-            "       return a + b; \n" +
-            "}" +
+            "import com.example.insert.annotations.Jasm;\n" +
+            "\n" +
+            "public class MinExample {\n" +
+            "\n" +
+            "  @Jasm({\n" +
+            "    @Block(start=11, end=17)\n" +
+            "  })\n" +
+            "  public static void main(String[] args) {\n" +
+            "    /*\n" +
+            "     getstatic 7\n" +
+            "     bipush 8\n" +
+            "     iconst_5\n" +
+            "     invokestatic 13\n" +
+            "     invokevirtual 19\n" +
+            "    */\n" +
+            "  }\n" +
+            "\n" +
+            "  public static int sum(int a, int b) {\n" +
+            "       return a+b;\n" +
+            "  }\n" +
             "}";
 
     @Context
@@ -65,8 +66,8 @@ public class Jasm {
         ClassFile cf = null;
         try {
             cf = new ClassFileParser("MinExample.class").parse();
-            // List<JasmBlock> jasmBlocks = JasmBlocksParser.extractJasmBlocks(source, cf.getMethods().getJasmAnnotationsPerMethod());
-            // ByteCodeInserter.insertBytecode(jasmBlocks, cf);
+            List<JasmBlock> jasmBlocks = JasmBlocksParser.extractJasmBlocks(source, cf.getMethods().getJasmAnnotationsPerMethod());
+            ByteCodeInserter.insertBytecode(jasmBlocks, cf);
             byte[] bytes = cf.writeBytes();
             ParsingUtil.printBytes(bytes);
             File out = new File("MinExample.class");

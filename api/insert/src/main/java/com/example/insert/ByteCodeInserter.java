@@ -16,7 +16,13 @@ public class ByteCodeInserter {
     public static void insertBytecode(List<JasmBlock> jasmBlocks, ClassFile classFile) {
         for (JasmBlock jasmBlock : jasmBlocks) {
             Long currentCodeLength = jasmBlock.getMethod().getCodeAttribute().getCodeLength();
+            Long currentAttributeLength = jasmBlock.getMethod().getCodeAttribute().getAttributeLength();
+            Integer currentMaxStack = jasmBlock.getMethod().getCodeAttribute().getMaxStack();
+            Integer currentMaxLocals = jasmBlock.getMethod().getCodeAttribute().getMaxLocals();
             jasmBlock.getMethod().getCodeAttribute().setCodeLength(currentCodeLength + jasmBlock.getByteCodeSize());
+            jasmBlock.getMethod().getCodeAttribute().setMaxStack(currentMaxStack + getMaxStackSizeDiff(jasmBlock));
+            jasmBlock.getMethod().getCodeAttribute().setMaxLocals(currentMaxLocals + getLocalsDiff(jasmBlock));
+            jasmBlock.getMethod().getCodeAttribute().setAttributeLength(currentAttributeLength + jasmBlock.getByteCodeSize());
             jasmBlock.getMethod().getCodeAttribute().getCode().getCode().addAll(getInsertionIndex(jasmBlock), jasmBlock.getByteCode());
         }
     }
@@ -39,6 +45,7 @@ public class ByteCodeInserter {
         for (LineNumberTableElement lineNumberTableElement : lineNumberTableAttribute.getLineNumberTable().getLineNumberTable()) {
             if (lineNumberTableElement.getLineNumber() > jasmBlock.getJasmBlockEndLine()) {
                 lineNumberTableIndex = lineNumberTableElement.getStartPc();
+                break;
             }
         }
 
@@ -58,5 +65,24 @@ public class ByteCodeInserter {
             codeTableIndex++;
         }
         return -1;
+    }
+
+    private static Integer getMaxStackSizeDiff(JasmBlock jasmBlock) {
+        Integer diff = 0;
+        for (Pair<Mnemonic, Arguments> command : jasmBlock.getByteCode()) {
+            if (command.getFirst().getMnemonic().contains("load") || command.getFirst().getMnemonic().contains("push"))
+                ++diff;
+        }
+
+        return diff;
+    }
+
+    private static Integer getLocalsDiff(JasmBlock jasmBlock) {
+        Integer diff = 0;
+        for (Pair<Mnemonic, Arguments> command : jasmBlock.getByteCode()) {
+            if (command.getFirst().getMnemonic().contains("store")) ++diff;
+        }
+
+        return diff;
     }
 }

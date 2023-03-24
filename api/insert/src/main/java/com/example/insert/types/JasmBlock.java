@@ -1,5 +1,6 @@
 package com.example.insert.types;
 
+import com.example.parser.enums.Mnemonics;
 import com.example.parser.types.attributes.util.types.code.Arguments;
 import com.example.parser.types.attributes.util.types.code.Mnemonic;
 import com.example.parser.types.methods.MethodInfo;
@@ -50,8 +51,9 @@ public class JasmBlock {
     }
 
     public Integer getByteCodeSize() {
+        Mnemonics m = new Mnemonics();
         return this.byteCode.stream()
-                .map(el -> 1 + el.getSecond().getArguments().size())
+                .map(el -> 1 + m.getMnemonicByOpcode(el.getFirst().getOpcode()).getSecond())
                 .reduce(0, Integer::sum);
     }
 

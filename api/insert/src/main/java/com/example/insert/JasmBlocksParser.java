@@ -36,7 +36,7 @@ public class JasmBlocksParser {
         List<Pair<Mnemonic, Arguments>> code = new ArrayList<>();
 
         for (String s : jasmSource) {
-            String[] split = s.strip().split(" ");
+            String[] split = s.strip().replaceAll(" +", " ").split(" ");
             Mnemonic mnemonic = new Mnemonic(mnemonics.getOpcodeByMnemonic(split[0]).getFirst(), split[0]);
             Arguments arguments = new Arguments();
 
