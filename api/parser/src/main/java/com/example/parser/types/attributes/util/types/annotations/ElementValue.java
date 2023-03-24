@@ -2,7 +2,9 @@ package com.example.parser.types.attributes.util.types.annotations;
 
 import com.example.parser.interfaces.ClassFileElement;
 import com.example.parser.types.attributes.util.types.annotations.elementValue.ElementValueType;
+import com.example.parser.util.WritingUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ElementValue<T extends ElementValueType> implements ClassFileElement {
@@ -32,6 +34,9 @@ public class ElementValue<T extends ElementValueType> implements ClassFileElemen
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        List<Byte> bytes = new ArrayList<>();
+        bytes.addAll(WritingUtil.writeBytes(Character.getNumericValue(this.tag), 1));
+        bytes.addAll(this.value.toHex());
+        return bytes;
     }
 }

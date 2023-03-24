@@ -21,6 +21,6 @@ public class AnnotationValue extends ElementValueType {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        return this.annotationValue.toHex();
     }
 }

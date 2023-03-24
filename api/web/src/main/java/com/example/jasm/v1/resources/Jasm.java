@@ -1,8 +1,5 @@
 package com.example.jasm.v1.resources;
 
-import com.example.insert.ByteCodeInserter;
-import com.example.insert.JasmBlocksParser;
-import com.example.insert.types.JasmBlock;
 import com.example.parser.exceptions.AttributeDoesNotExistException;
 import com.example.parser.parsing.ClassFileParser;
 import com.example.parser.types.ClassFile;
@@ -19,7 +16,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.List;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 @Path("compile")
 @Produces(MediaType.APPLICATION_JSON)
@@ -66,11 +65,17 @@ public class Jasm {
         ClassFile cf = null;
         try {
             cf = new ClassFileParser("MinExample.class").parse();
-            List<JasmBlock> jasmBlocks = JasmBlocksParser.extractJasmBlocks(source, cf.getMethods().getJasmAnnotationsPerMethod());
-            ByteCodeInserter.insertBytecode(jasmBlocks, cf);
-            ParsingUtil.printBytes(cf.writeBytes());
+            // List<JasmBlock> jasmBlocks = JasmBlocksParser.extractJasmBlocks(source, cf.getMethods().getJasmAnnotationsPerMethod());
+            // ByteCodeInserter.insertBytecode(jasmBlocks, cf);
+            byte[] bytes = cf.writeBytes();
+            ParsingUtil.printBytes(bytes);
+            File out = new File("MinExample.class");
+            FileOutputStream os = new FileOutputStream(out);
+            os.write(bytes);
         } catch (AttributeDoesNotExistException e) {
             return Response.serverError().build();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return Response.ok(cf.toString()).header("Access-Control-Allow-Origin", "*").build();
     }

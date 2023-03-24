@@ -27,6 +27,12 @@ public class ElementValuePairs implements ClassFileElement {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        return this.elementValuePairs
+                .stream()
+                .map(ClassFileElement::toHex)
+                .reduce(new ArrayList<>(), (acc, el) -> {
+                    acc.addAll(el);
+                    return acc;
+                });
     }
 }

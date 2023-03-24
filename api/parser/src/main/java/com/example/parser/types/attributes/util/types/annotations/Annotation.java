@@ -2,7 +2,9 @@ package com.example.parser.types.attributes.util.types.annotations;
 
 import com.example.parser.interfaces.ClassFileElement;
 import com.example.parser.types.constantPool.constants.strings.Utf8Constant;
+import com.example.parser.util.WritingUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Annotation implements ClassFileElement {
@@ -53,6 +55,10 @@ public class Annotation implements ClassFileElement {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        List<Byte> bytes = new ArrayList<>();
+        bytes.addAll(WritingUtil.writeBytes(this.typeIndex, 2));
+        bytes.addAll(WritingUtil.writeBytes(this.numElementValuePairs, 2));
+        bytes.addAll(this.elementValuePairs.toHex());
+        return bytes;
     }
 }

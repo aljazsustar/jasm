@@ -27,6 +27,12 @@ public class Annotations implements ClassFileElement {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        return this.annotations
+                .stream()
+                .map(ClassFileElement::toHex)
+                .reduce(new ArrayList<>(), (acc, el) -> {
+                    acc.addAll(el);
+                    return acc;
+                });
     }
 }

@@ -45,4 +45,14 @@ public class Arguments implements ClassFileElement {
                     return acc;
                 });
     }
+
+    public List<Byte> toHex(Integer argSize) {
+        return this.arguments
+                .stream()
+                .map(el -> WritingUtil.writeBytes(el, argSize))
+                .reduce(new ArrayList<>(), (acc, el) -> {
+                    acc.addAll(el);
+                    return acc;
+                });
+    }
 }

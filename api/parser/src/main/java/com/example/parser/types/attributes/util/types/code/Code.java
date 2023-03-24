@@ -1,5 +1,6 @@
 package com.example.parser.types.attributes.util.types.code;
 
+import com.example.parser.enums.Mnemonics;
 import com.example.parser.interfaces.ClassFileElement;
 import com.example.parser.util.types.Pair;
 
@@ -25,12 +26,18 @@ public class Code implements ClassFileElement {
 
     @Override
     public List<Byte> toHex() {
+        Mnemonics m = new Mnemonics();
         List<Byte> bytes = new ArrayList<>();
         for (Pair<Mnemonic, Arguments> code : this.code) {
+            Integer argsNumber = m.getMnemonicByOpcode(code.getFirst().getOpcode()).getSecond();
             bytes.addAll(code.getFirst().toHex());
-            bytes.addAll(code.getSecond().toHex());
+            bytes.addAll(code.getSecond().toHex(this.getSizePerArgument(code.getSecond().getArguments(), argsNumber)));
         }
         return bytes;
+    }
+
+    private Integer getSizePerArgument(List<Integer> arguments, Integer argsNumber) {
+        return argsNumber != 0 ? argsNumber / arguments.size() : 0;
     }
 
     @Override

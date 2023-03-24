@@ -1,13 +1,15 @@
 package com.example.parser.types.attributes.util.types.annotations.elementValue;
 
+import com.example.parser.interfaces.ClassFileElement;
 import com.example.parser.types.attributes.util.types.annotations.ElementValue;
+import com.example.parser.util.WritingUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ArrayValue<T extends ElementValueType> extends ElementValueType {
+    private final List<ElementValue<?>> values;
     private Integer numValues;
-    private List<ElementValue<?>> values;
 
     public ArrayValue(Integer numValues) {
         this.numValues = numValues;
@@ -32,6 +34,15 @@ public class ArrayValue<T extends ElementValueType> extends ElementValueType {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        List<Byte> bytes = new ArrayList<>();
+        bytes.addAll(WritingUtil.writeBytes(this.numValues, 2));
+        bytes.addAll(this.values
+                .stream()
+                .map(ClassFileElement::toHex)
+                .reduce(new ArrayList<>(), (acc, el) -> {
+                    acc.addAll(el);
+                    return acc;
+                }));
+        return bytes;
     }
 }

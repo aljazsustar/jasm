@@ -64,7 +64,7 @@ public class AttributeParser {
             case "InnerClasses":
                 return this.parseInnerClassesAttribute(attributeName);
             case "RuntimeInvisibleAnnotations":
-                return this.parseRuntimeVisibleAnnotationsAttribute(attributeName);
+                return this.parseRuntimeVisibleAnnotationsAttribute(attributeNameIndex, attributeName);
 
         }
         throw new AttributeDoesNotExistException();
@@ -130,10 +130,10 @@ public class AttributeParser {
         return null;
     }
 
-    private AttributeBase parseRuntimeVisibleAnnotationsAttribute(Utf8Constant attributeName) {
+    private AttributeBase parseRuntimeVisibleAnnotationsAttribute(Integer attributeNameIndex, Utf8Constant attributeName) {
         Long attributeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
         Integer numAnnotations = ParsingUtil.bytesToInt(ParsingUtil.readNBytes(this.inputStream, 2));
         Annotations attributes = AttributesUtil.parseAnnotations(this.inputStream, this.constantPool, numAnnotations);
-        return new RuntimeInvisibleAnnotations(attributeName, attributeLength, numAnnotations, attributes);
+        return new RuntimeInvisibleAnnotations(attributeNameIndex, attributeName, attributeLength, numAnnotations, attributes);
     }
 }

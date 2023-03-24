@@ -1,7 +1,9 @@
 package com.example.parser.types.attributes.util.types.annotations.elementValue;
 
 import com.example.parser.types.constantPool.constants.strings.Utf8Constant;
+import com.example.parser.util.WritingUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EnumConstValue extends ElementValueType {
@@ -52,6 +54,9 @@ public class EnumConstValue extends ElementValueType {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        List<Byte> bytes = new ArrayList<>();
+        bytes.addAll(WritingUtil.writeBytes(this.typeNameIndex, 2));
+        bytes.addAll(WritingUtil.writeBytes(this.constNameIndex, 2));
+        return bytes;
     }
 }

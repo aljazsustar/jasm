@@ -1,6 +1,7 @@
 package com.example.parser.types.attributes.util.types.annotations.elementValue;
 
 import com.example.parser.types.constantPool.constants.ClassConstant;
+import com.example.parser.util.WritingUtil;
 
 import java.util.List;
 
@@ -32,6 +33,6 @@ public class ClassInfo extends ElementValueType {
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        return WritingUtil.writeBytes(this.classInfoIndex, 2);
     }
 }
