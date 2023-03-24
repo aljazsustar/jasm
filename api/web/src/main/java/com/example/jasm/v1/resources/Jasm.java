@@ -37,8 +37,6 @@ import java.util.logging.Logger;
 
 
 @Path("compile")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.TEXT_PLAIN)
 @RequestScoped
 public class Jasm {
 
@@ -48,6 +46,8 @@ public class Jasm {
 
     @POST
     @Path("getInfo")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
     @PermitAll
     @RequestScoped
     public Response getInfo(String content) {
@@ -79,7 +79,10 @@ public class Jasm {
         JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics, optionList, null, sourceFiles);
 
         boolean result = task.call();
-
+        if (!result) {
+            diagnostics.getDiagnostics()
+                    .forEach(d -> Logger.getLogger("diagnostics").log(Level.SEVERE, String.valueOf(d)));
+        }
         PipedInputStream in = new PipedInputStream();
         try (final PipedOutputStream out = new PipedOutputStream(in)) {
             manager.getBytesMap().get(className).openOutputStream().writeTo(out);
