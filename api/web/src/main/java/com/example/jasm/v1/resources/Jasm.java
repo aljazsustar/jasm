@@ -3,6 +3,8 @@ package com.example.jasm.v1.resources;
 import com.example.insert.ByteCodeInserter;
 import com.example.insert.JasmBlocksParser;
 import com.example.insert.types.JasmBlock;
+import com.example.jasm.v1.models.ExecutionResult;
+import com.example.jasm.v1.models.Result;
 import com.example.parser.exceptions.AttributeDoesNotExistException;
 import com.example.parser.parsing.ClassFileParser;
 import com.example.parser.types.ClassFile;
@@ -42,29 +44,7 @@ import java.util.logging.Logger;
 @CrossOrigin
 public class Jasm {
 
-    String source = "import com.example.insert.annotations.Block;\n" +
-            "import com.example.insert.annotations.Jasm;\n" +
-            "\n" +
-            "public class MinExample {\n" +
-            "\n" +
-            "  @Jasm({\n" +
-            "    @Block(start=11, end=15)\n" +
-            "  })\n" +
-            "  public static void main(String[] args) {\n" +
-            "    /*\n" +
-            "     getstatic 7\n" +
-            "     bipush 8\n" +
-            "     iconst_5\n" +
-            "     invokestatic 13\n" +
-            "     invokevirtual 19\n" +
-            "    */\n" +
-            "    System.out.println(sum(8, 5));\n" +
-            "  }\n" +
-            "\n" +
-            "  public static int sum(int a, int b) {\n" +
-            "       return a+b;\n" +
-            "  }\n" +
-            "}\n";
+    String className = "Main";
 
     @Context
     protected UriInfo uriInfo;
@@ -75,17 +55,9 @@ public class Jasm {
     @CrossOrigin
     public Response getInfo(String content) {
 
-        ClassFile cf = null;
+        Result res;
         try {
-            whenStringIsCompiled_ThenCodeShouldExecute("MinExample", this.source);
-            cf = new ClassFileParser("MinExample.class").parse();
-            List<JasmBlock> jasmBlocks = JasmBlocksParser.extractJasmBlocks(source, cf.getMethods().getJasmAnnotationsPerMethod());
-            ByteCodeInserter.insertBytecode(jasmBlocks, cf);
-            byte[] bytes = cf.writeBytes();
-            //ParsingUtil.printBytes(bytes);
-            File out = new File("MinExample.class");
-            FileOutputStream os = new FileOutputStream(out);
-            os.write(bytes);
+            res = compileAndExecute(className, content);
         } catch (AttributeDoesNotExistException e) {
             return Response.serverError().build();
         } catch (IOException e) {
@@ -97,16 +69,16 @@ public class Jasm {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-        return Response.ok(cf.toString()).header("Access-Control-Allow-Origin", "*").build();
+        return Response.ok(res.toJsonString()).header("Access-Control-Allow-Origin", "*").build();
     }
 
-    public void whenStringIsCompiled_ThenCodeShouldExecute(String qualifiedClassName, String sourceCode) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, AttributeDoesNotExistException, IOException {
+    public Result compileAndExecute(String className, String source) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, AttributeDoesNotExistException, IOException {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
         InMemoryFileManager manager = new InMemoryFileManager(compiler.getStandardFileManager(null, null, null));
         List<String> optionList = new ArrayList<>(List.of("-classpath", "insert/src/main/java"));
 
-        List<JavaFileObject> sourceFiles = Collections.singletonList(new JavaSourceFromString(qualifiedClassName, sourceCode));
+        List<JavaFileObject> sourceFiles = Collections.singletonList(new JavaSourceFromString(className, source));
         JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics, optionList, null, sourceFiles);
 
         boolean result = task.call();
@@ -114,7 +86,7 @@ public class Jasm {
         PipedInputStream in = new PipedInputStream();
         new Thread(() -> {
             try (final PipedOutputStream out = new PipedOutputStream(in)) {
-                manager.getBytesMap().get("MinExample").openOutputStream().writeTo(out);
+                manager.getBytesMap().get(className).openOutputStream().writeTo(out);
             } catch (IOException e) {
                 // logging and exception handling should go here
             }
@@ -123,8 +95,9 @@ public class Jasm {
         ClassFile cf = new ClassFileParser(new BufferedInputStream(in)).parse();
         List<JasmBlock> jasmBlocks = JasmBlocksParser.extractJasmBlocks(source, cf.getMethods().getJasmAnnotationsPerMethod());
         ByteCodeInserter.insertBytecode(jasmBlocks, cf);
-        manager.getBytesMap().get("MinExample").openOutputStream().reset();
-        manager.getBytesMap().get("MinExample").openOutputStream().write(cf.writeBytes());
+        manager.getBytesMap().get(className).openOutputStream().reset();
+        manager.getBytesMap().get(className).openOutputStream().write(cf.writeBytes());
+        Result res = new Result();
         if (!result) {
             diagnostics.getDiagnostics()
                     .forEach(d -> Logger.getLogger("diagnostics").log(Level.SEVERE, String.valueOf(d)));
@@ -133,12 +106,15 @@ public class Jasm {
             InvocationOutputStream invocationOutputStream = new InvocationOutputStream(System.out);
             PrintStream out = System.out;
             System.setOut(new PrintStream(invocationOutputStream));
-            Class<?> clazz = classLoader.loadClass(qualifiedClassName);
-            Method m = clazz.getMethod("main", String[].class);
+            Class<?> clazz = classLoader.loadClass(className);
+            Method m = clazz.getMethod(className, String[].class);
             m.invoke(null, (Object) null);
             String s = invocationOutputStream.getAndClear();
+            res.setExecutionResult(new ExecutionResult(s));
             System.setOut(out);
             System.setOut(invocationOutputStream.getOriginal());
         }
+        res.setClassFile(cf);
+        return res;
     }
 }
