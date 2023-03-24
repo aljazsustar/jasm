@@ -25,10 +25,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -51,7 +48,7 @@ public class Jasm {
             "public class MinExample {\n" +
             "\n" +
             "  @Jasm({\n" +
-            "    @Block(start=11, end=17)\n" +
+            "    @Block(start=11, end=15)\n" +
             "  })\n" +
             "  public static void main(String[] args) {\n" +
             "    /*\n" +
@@ -61,13 +58,13 @@ public class Jasm {
             "     invokestatic 13\n" +
             "     invokevirtual 19\n" +
             "    */\n" +
-            "System.out.println(sum(8,5));\n" +
+            "    System.out.println(sum(8, 5));\n" +
             "  }\n" +
             "\n" +
             "  public static int sum(int a, int b) {\n" +
             "       return a+b;\n" +
             "  }\n" +
-            "}";
+            "}\n";
 
     @Context
     protected UriInfo uriInfo;
@@ -103,7 +100,7 @@ public class Jasm {
         return Response.ok(cf.toString()).header("Access-Control-Allow-Origin", "*").build();
     }
 
-    public void whenStringIsCompiled_ThenCodeShouldExecute(String qualifiedClassName, String sourceCode) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    public void whenStringIsCompiled_ThenCodeShouldExecute(String qualifiedClassName, String sourceCode) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, AttributeDoesNotExistException, IOException {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
         InMemoryFileManager manager = new InMemoryFileManager(compiler.getStandardFileManager(null, null, null));
@@ -114,6 +111,20 @@ public class Jasm {
 
         boolean result = task.call();
 
+        PipedInputStream in = new PipedInputStream();
+        new Thread(() -> {
+            try (final PipedOutputStream out = new PipedOutputStream(in)) {
+                manager.getBytesMap().get("MinExample").openOutputStream().writeTo(out);
+            } catch (IOException e) {
+                // logging and exception handling should go here
+            }
+        }).start();
+
+        ClassFile cf = new ClassFileParser(new BufferedInputStream(in)).parse();
+        List<JasmBlock> jasmBlocks = JasmBlocksParser.extractJasmBlocks(source, cf.getMethods().getJasmAnnotationsPerMethod());
+        ByteCodeInserter.insertBytecode(jasmBlocks, cf);
+        manager.getBytesMap().get("MinExample").openOutputStream().reset();
+        manager.getBytesMap().get("MinExample").openOutputStream().write(cf.writeBytes());
         if (!result) {
             diagnostics.getDiagnostics()
                     .forEach(d -> Logger.getLogger("diagnostics").log(Level.SEVERE, String.valueOf(d)));
@@ -128,7 +139,6 @@ public class Jasm {
             String s = invocationOutputStream.getAndClear();
             System.setOut(out);
             System.setOut(invocationOutputStream.getOriginal());
-            System.out.println(s);
         }
     }
 }

@@ -30,6 +30,10 @@ public class ClassFileParser {
         this.inputStream = new BufferedInputStream(inputStream);
     }
 
+    public ClassFileParser(BufferedInputStream inputStream) {
+        this.inputStream = inputStream;
+    }
+
     public ClassFile parse() throws AttributeDoesNotExistException {
         ClassFile classFile = new ClassFile();
         classFile.setMagic(this.parseMagic());

@@ -2,10 +2,9 @@ package com.example.parser.util;
 
 import javax.tools.SimpleJavaFileObject;
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.net.URI;
 
-class JavaClassAsBytes extends SimpleJavaFileObject {
+public class JavaClassAsBytes extends SimpleJavaFileObject {
 
     protected ByteArrayOutputStream bos =
             new ByteArrayOutputStream();
@@ -20,7 +19,7 @@ class JavaClassAsBytes extends SimpleJavaFileObject {
     }
 
     @Override
-    public OutputStream openOutputStream() {
+    public ByteArrayOutputStream openOutputStream() {
         return bos;
     }
 }
