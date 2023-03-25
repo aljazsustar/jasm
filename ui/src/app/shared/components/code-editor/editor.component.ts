@@ -43,6 +43,5 @@ public class Main {
   };
 
   onCodeChanged(value: any) {
-    console.log('CODE', this.codeModel.value);
   }
 }

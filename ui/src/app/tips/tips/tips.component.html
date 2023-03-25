@@ -1,0 +1,13 @@
+<div class="container text-white">
+  <ul>
+    <li><b>DO NOT</b> change the class name. Class name should always be <code>Main</code>, since that is used to load the class.</li>
+    <li><b>DO NOT</b> remove imports set by default. They need to be there in order to compile the annotations properly.<</li>
+    <li>Bytecode should be written in the following format:<br> <code>/*<br>&lt;bytecode&gt;<br>*/</code><br>Comment start and
+    end symbols (<code>/*</code> and <code>*/</code>) should be written on separate lines. This is referred to as a <i>Jasm block</i>.</li>
+    <li>Methods containing Jasm blocks should be annotated with <code>@Jasm</code>. <code>@Jasm</code> annotation accepts
+    a list of <code>@Block</code> annotations. <code>@Block</code> annotation accepts 2 parameters: <code>start</code> and <code>end</code>,
+    denoting the line where the Jasm block starts and ends. Value of <code>start</code> and <code>end</code> should be the line,
+    where the actually bytecode begins and ends (not where the comments begin and end). There should be a <code>@Block</code>
+    annotation for each Jasm block in a given method.</li>
+  </ul>
+</div>

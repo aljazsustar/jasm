@@ -7,8 +7,15 @@ services:
       - web
     ports:
       - '6969:80'
+    networks:
+      - webnetwork
   web:
     container_name: web
     build: ./api
     ports:
       - '8080:8080'
+    networks:
+      - webnetwork
+
+networks:
+  webnetwork:
