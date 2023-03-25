@@ -3,8 +3,12 @@ version: '3'
 services:
   ui:
     build: ./ui
+    depends_on:
+      - web
     ports:
       - '6969:80'
   web:
+    container_name: web
     build: ./api
-
+    ports:
+      - '8080:8080'

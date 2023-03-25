@@ -11,6 +11,7 @@ import com.example.parser.types.ClassFile;
 import com.example.parser.util.InMemoryFileManager;
 import com.example.parser.util.InvocationOutputStream;
 import com.example.parser.util.JavaSourceFromString;
+import com.kumuluz.ee.cors.annotations.CrossOrigin;
 
 import javax.annotation.security.PermitAll;
 import javax.enterprise.context.RequestScoped;
@@ -50,6 +51,7 @@ public class Jasm {
     @Consumes(MediaType.TEXT_PLAIN)
     @PermitAll
     @RequestScoped
+    @CrossOrigin
     public Response getInfo(String content) {
 
         Result res;
@@ -73,7 +75,7 @@ public class Jasm {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
         InMemoryFileManager manager = new InMemoryFileManager(compiler.getStandardFileManager(null, null, null));
-        List<String> optionList = new ArrayList<>(List.of("-classpath", "insert/src/main/java"));
+        List<String> optionList = new ArrayList<>(List.of("-classpath", "src/main/java"));
 
         List<JavaFileObject> sourceFiles = Collections.singletonList(new JavaSourceFromString(className, source));
         JavaCompiler.CompilationTask task = compiler.getTask(null, manager, diagnostics, optionList, null, sourceFiles);

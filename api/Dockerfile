@@ -1,9 +1,10 @@
-FROM openjdk:15
+FROM openjdk:19
 RUN mkdir /app
 
 WORKDIR /app
 
 ADD ./web/target/web-1.2-SNAPSHOT.jar /app
+COPY insert /app
 
 EXPOSE 8080
 
