@@ -4,7 +4,8 @@ RUN mkdir /app
 WORKDIR /app
 
 ADD ./web/target/web-1.2-SNAPSHOT.jar /app
-COPY insert /app
+RUN mkdir insert
+COPY insert /app/insert
 
 EXPOSE 8080
 
