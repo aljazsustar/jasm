@@ -7,7 +7,7 @@ import {Result} from "./models/classFile";
 })
 export class ApiService {
   private headers = new HttpHeaders({'Content-Type': 'text/plain'});
-  private apiUrl: string = 'http://0.0.0.0:8080/v1/compile';
+  private apiUrl: string = '//0.0.0.0:8080/v1/compile';
 
   constructor(private http: HttpClient) { }
 
