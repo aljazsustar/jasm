@@ -1,4 +1,4 @@
-FROM debian
+FROM openjdk:19
 RUN mkdir /app
 
 WORKDIR /app
