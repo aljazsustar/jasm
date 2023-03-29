@@ -1,6 +1,8 @@
 <div class="editor-parent row mx-1">
   <div class="col-6" style="flex-direction: column">
-    <app-code-editor-toolbar (onCompile)="onCompile()"></app-code-editor-toolbar>
+    <app-code-editor-toolbar [showSaveClassFile]="showSaveClassFile" (onCompile)="onCompile()"
+                             (onSaveToClassFile)="onSaveToClassFile()"
+                             (onSaveToFile)="onSaveSourceToFile()"></app-code-editor-toolbar>
     <app-code-editor #codeEditor></app-code-editor>
   </div>
   <div class="col-6" *ngIf="result">

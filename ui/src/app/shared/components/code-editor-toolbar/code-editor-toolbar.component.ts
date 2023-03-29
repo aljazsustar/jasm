@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'app-code-editor-toolbar',
@@ -13,11 +13,21 @@ export class CodeEditorToolbarComponent {
   @Output()
   public onSaveToFile = new EventEmitter();
 
+  @Output()
+  public onSaveToClassFile = new EventEmitter();
+
+  @Input()
+  public showSaveClassFile: boolean = false;
+
   onCompileClicked() {
     this.onCompile.emit();
   }
 
   onSaveToFileClicked() {
     this.onSaveToFile.emit();
+  }
+
+  onSaveToClassFileClicked() {
+    this.onSaveToClassFile.emit();
   }
 }

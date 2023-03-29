@@ -109,7 +109,7 @@ public class Jasm {
             Method m = clazz.getMethod("main", String[].class);
             m.invoke(null, (Object) null);
             String s = invocationOutputStream.getAndClear();
-            res.setExecutionResult(new ExecutionResult(s));
+            res.setExecutionResult(new ExecutionResult(s, cf.writeBytes()));
             System.setOut(out);
             out.flush();
             out.close();

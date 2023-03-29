@@ -14,6 +14,7 @@ export interface ConstantPool{
 
 export interface ExecutionResult{
   stdOut: string;
+  compiledClassFile: number[];
 }
 
 export interface Interfaces{

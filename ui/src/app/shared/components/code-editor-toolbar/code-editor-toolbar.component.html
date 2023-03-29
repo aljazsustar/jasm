@@ -1,4 +1,8 @@
 <div class="mb-2">
-    <button type="button" class="btn btn-outline-primary me-2" (click)="onCompileClicked()">Compile</button>
-    <button type="button" class="btn btn-outline-primary" (click)="onSaveToFileClicked()">Save to file</button>
+  <button type="button" class="btn btn-outline-primary me-2" (click)="onCompileClicked()">Compile</button>
+  <button type="button" class="btn btn-outline-primary me-2" (click)="onSaveToFileClicked()">Download Java source code
+  </button>
+  <button *ngIf="showSaveClassFile" type="button" class="btn btn-outline-primary" (click)="onSaveToClassFileClicked()">
+    Download .class file
+  </button>
 </div>

@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from "../services/api.service";
-import {ClassFile, Result} from "../services/models/classFile";
+import {Result} from "../services/models/classFile";
 import {EditorComponent} from "../shared/components/code-editor/editor.component";
 
 @Component({
@@ -14,6 +14,7 @@ export class HomeComponent implements OnInit {
   public codeEditor: EditorComponent | undefined;
 
   public result: Result | undefined;
+  public showSaveClassFile = false;
 
   constructor(private apiService: ApiService) {
   }
@@ -22,7 +23,34 @@ export class HomeComponent implements OnInit {
   }
 
   onCompile() {
-    this.apiService.compileSource(this.codeEditor?.codeModel?.value).subscribe(res => this.result = res);
+    this.apiService.compileSource(this.codeEditor?.codeModel?.value).subscribe(res => {
+      this.result = res;
+      this.showSaveClassFile = true;
+    });
+  }
+
+  onSaveToClassFile() {
+    //let dataType = response.type;
+    // let downloadLink = document.createElement('a');
+    // downloadLink.href = window.URL.createObjectURL(new Blob(new Uint8Array(this.result!.executionResult.compiledClassFile), {type: 'binary'}));
+    // downloadLink.setAttribute('download', 'Main.class');
+    // document.body.appendChild(downloadLink);
+    // downloadLink.click();
+    // downloadLink.parentNode?.removeChild(downloadLink);
+  }
+
+  onSaveSourceToFile() {
+    let file = new Blob([this.codeEditor!.codeModel.value], {type: '.java'});
+    let a = document.createElement("a"),
+      url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = 'Main.java';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 0);
   }
 
 }
