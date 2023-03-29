@@ -38,7 +38,6 @@ import java.util.logging.Logger;
 
 
 @Path("compile")
-@RequestScoped
 @CrossOrigin
 public class Jasm {
 
@@ -57,16 +56,9 @@ public class Jasm {
         Result res;
         try {
             res = compileAndExecute(className, content);
-        } catch (AttributeDoesNotExistException e) {
+        } catch (AttributeDoesNotExistException | IOException | ClassNotFoundException | NoSuchMethodException |
+                 InvocationTargetException | InstantiationException | IllegalAccessException e) {
             return Response.serverError().build();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
         }
         return Response.ok(res.toJsonString()).header("Access-Control-Allow-Origin", "*").build();
     }

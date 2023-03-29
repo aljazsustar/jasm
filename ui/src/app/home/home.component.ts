@@ -2,6 +2,9 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from "../services/api.service";
 import {Result} from "../services/models/classFile";
 import {EditorComponent} from "../shared/components/code-editor/editor.component";
+import { Buffer } from 'buffer';
+
+window.Buffer = Buffer;
 
 @Component({
   selector: 'app-home',
@@ -30,13 +33,13 @@ export class HomeComponent implements OnInit {
   }
 
   onSaveToClassFile() {
-    //let dataType = response.type;
-    // let downloadLink = document.createElement('a');
-    // downloadLink.href = window.URL.createObjectURL(new Blob(new Uint8Array(this.result!.executionResult.compiledClassFile), {type: 'binary'}));
-    // downloadLink.setAttribute('download', 'Main.class');
-    // document.body.appendChild(downloadLink);
-    // downloadLink.click();
-    // downloadLink.parentNode?.removeChild(downloadLink);
+    let downloadLink = document.createElement('a');
+    var b64encoded = Buffer.from(new Uint8Array(this.result!.executionResult.compiledClassFile));
+    downloadLink.href = window.URL.createObjectURL(new Blob([b64encoded], {type: 'application/octet-stream'}));
+    downloadLink.setAttribute('download', 'Main.class');
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    downloadLink.parentNode?.removeChild(downloadLink);
   }
 
   onSaveSourceToFile() {

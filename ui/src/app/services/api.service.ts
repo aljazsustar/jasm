@@ -7,11 +7,16 @@ import {Result} from "./models/classFile";
 })
 export class ApiService {
   private headers = new HttpHeaders({'Content-Type': 'text/plain'});
-  private apiUrl: string = 'http://0.0.0.0:8080/v1/compile';
+  private apiUrl: string = 'http://localhost:8080/v1/compile';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   compileSource(fileContent?: string) {
-    return this.http.post<Result>(`${this.apiUrl}/getInfo`, fileContent, {headers: this.headers});
+    return this.http.post<Result>(`${this.apiUrl}/getInfo`, fileContent);
+  }
+
+  getClassFile() {
+    return this.http.get<any>(`${this.apiUrl}/classFile`);
   }
 }

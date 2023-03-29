@@ -14,13 +14,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <github.global.server>github</github.global.server>
         <kumuluzee.version>4.0.0</kumuluzee.version>
-        <kumuluzee-rest.version>1.5.1</kumuluzee-rest.version>
+        <kumuluzee-rest.version>2.0.1</kumuluzee-rest.version>
         <kumuluzee-openapi.version>1.4.0</kumuluzee-openapi.version>
         <kumuluzee-config.version>1.4.1</kumuluzee-config.version>
         <kumuluzee-security.version>1.2.0</kumuluzee-security.version>
         <kumuluzee-health.version>2.4.3</kumuluzee-health.version>
         <kumuluzee-cors.version>2.0.0</kumuluzee-cors.version>
         <keycloak.version>15.0.2</keycloak.version>
+        <jersey2.version>2</jersey2.version>
     </properties>
 
     <modules>
