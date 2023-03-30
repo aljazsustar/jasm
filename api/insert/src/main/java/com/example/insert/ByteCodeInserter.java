@@ -24,6 +24,17 @@ public class ByteCodeInserter {
             jasmBlock.getMethod().getCodeAttribute().setMaxLocals(currentMaxLocals + getLocalsDiff(jasmBlock));
             jasmBlock.getMethod().getCodeAttribute().setAttributeLength(currentAttributeLength + jasmBlock.getByteCodeSize());
             jasmBlock.getMethod().getCodeAttribute().getCode().getCode().addAll(getInsertionIndex(jasmBlock), jasmBlock.getByteCode());
+            deleteIf2Returns(jasmBlock);
+        }
+    }
+
+    private static void deleteIf2Returns(JasmBlock jasmBlock) {
+        List<Pair<Mnemonic, Arguments>> code = jasmBlock.getMethod().getCodeAttribute().getCode().getCode();
+        Pair<Mnemonic, Arguments> last = code.get(code.size() - 1);
+        Pair<Mnemonic, Arguments> secondToLast = code.get(code.size() - 2);
+
+        if (last.getFirst().getMnemonic().contains("return") && secondToLast.getFirst().getMnemonic().contains("return")) {
+            code.remove(last);
         }
     }
 
