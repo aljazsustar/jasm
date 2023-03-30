@@ -104,7 +104,7 @@ public class FormattingVisitor implements ArgVisitor<List<ConstantPoolElementJso
         ConstantPoolElementJsonFormat el = new ConstantPoolElementJsonFormat();
         el.constantPoolIndex = methodRefConstant.getConstantPoolIndex() + 1;
         el.type = "MethodRef";
-        el.name = methodRefConstant.getClassConstant().getClassName().getValue() + methodRefConstant.getNameAndTypeConstant().getName().getValue();
+        el.name = methodRefConstant.getClassConstant().getClassName().getValue() + "." + methodRefConstant.getNameAndTypeConstant().getName().getValue();
         arg.add(el);
     }
 
