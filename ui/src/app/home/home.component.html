@@ -1,11 +1,11 @@
 <div class="editor-parent row mx-1">
-  <div class="col-6" style="flex-direction: column">
+  <div class="col-md-6 col-sm-12" style="flex-direction: column">
     <app-code-editor-toolbar [showSaveClassFile]="showSaveClassFile" (onCompile)="onCompile()"
                              (onSaveToClassFile)="onSaveToClassFile()"
                              (onSaveToFile)="onSaveSourceToFile()"></app-code-editor-toolbar>
     <app-code-editor #codeEditor></app-code-editor>
   </div>
-  <div class="col-6" *ngIf="result">
+  <div class="col-sm-12 col-md-6" *ngIf="result">
     <h2 style="color: aliceblue">Execution results:</h2>
     <p style="color: aliceblue">Standard output: {{result.executionResult.stdOut}}</p>
     <app-constant-pool [constantPool]="result?.classFile?.constantPool"></app-constant-pool>
