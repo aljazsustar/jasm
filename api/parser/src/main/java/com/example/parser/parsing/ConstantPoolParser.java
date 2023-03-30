@@ -14,6 +14,7 @@ import com.example.parser.types.constantPool.constants.numeric.LongConstant;
 import com.example.parser.types.constantPool.constants.strings.StringConstant;
 import com.example.parser.types.constantPool.constants.strings.Utf8Constant;
 import com.example.parser.util.ParsingUtil;
+import com.example.parser.visitors.ConstantPoolVisitor;
 
 import java.io.BufferedInputStream;
 
@@ -42,60 +43,33 @@ public class ConstantPoolParser {
             }
 
             switch (tag) {
-                case ConstantPoolTags.CONSTANT_Class:
-                    constantPool.addToConstantPool(this.parseClassConstant());
-                    break;
-                case ConstantPoolTags.CONSTANT_Methodref:
-                    constantPool.addToConstantPool(this.parseMethodRefConstant());
-                    break;
-                case ConstantPoolTags.CONSTANT_Fieldref:
-                    constantPool.addToConstantPool(this.parseFieldRefConstant());
-                    break;
-                case ConstantPoolTags.CONSTANT_NameAndType:
-                    constantPool.addToConstantPool(this.parseNameAndTypeConstant());
-                    break;
-                case ConstantPoolTags.CONSTANT_Utf8:
-                    constantPool.addToConstantPool(this.parseUtf8Constant());
-                    break;
-                case ConstantPoolTags.CONSTANT_String:
-                    constantPool.addToConstantPool(this.parseStringConstant());
-                    break;
-                case ConstantPoolTags.CONSTANT_Integer:
-                    constantPool.addToConstantPool(this.parseIntegerConstant());
-                    break;
-                case ConstantPoolTags.CONSTANT_Long:
-                    constantPool.addToConstantPool(this.parseLongConstant());
-                    break;
-                case ConstantPoolTags.CONSTANT_Float:
-                    constantPool.addToConstantPool(this.parseFloatConstant());
-                    break;
-                case ConstantPoolTags.CONSTANT_Double:
-                    constantPool.addToConstantPool(this.parseDoubleConstant());
-                    break;
-                case ConstantPoolTags.CONSTANT_InterfaceMethodref:
-                    constantPool.addToConstantPool(this.parseInterfaceMethodRefConstant());
-                    break;
-                case ConstantPoolTags.CONSTANT_MethodHandle:
-                    constantPool.addToConstantPool(this.parseMethodHandleConstant());
-                    break;
-                case ConstantPoolTags.CONSTANT_MethodType:
-                    constantPool.addToConstantPool(this.parseMethodTypeConstant());
-                    break;
-                case ConstantPoolTags.CONSTANT_Dynamic:
-                    constantPool.addToConstantPool(this.parseDynamicConstant());
-                    break;
-                case ConstantPoolTags.CONSTANT_InvokeDynamic:
-                    constantPool.addToConstantPool(this.parseInvokeDynamicConstant());
-                    break;
-                case ConstantPoolTags.CONSTANT_Module:
-                    constantPool.addToConstantPool(this.parseModuleConstant());
-                    break;
-                case ConstantPoolTags.CONSTANT_Package:
-                    constantPool.addToConstantPool(this.parsePackageConstant());
-                    break;
+                case ConstantPoolTags.CONSTANT_Class -> constantPool.addToConstantPool(this.parseClassConstant());
+                case ConstantPoolTags.CONSTANT_Methodref ->
+                        constantPool.addToConstantPool(this.parseMethodRefConstant());
+                case ConstantPoolTags.CONSTANT_Fieldref -> constantPool.addToConstantPool(this.parseFieldRefConstant());
+                case ConstantPoolTags.CONSTANT_NameAndType ->
+                        constantPool.addToConstantPool(this.parseNameAndTypeConstant());
+                case ConstantPoolTags.CONSTANT_Utf8 -> constantPool.addToConstantPool(this.parseUtf8Constant());
+                case ConstantPoolTags.CONSTANT_String -> constantPool.addToConstantPool(this.parseStringConstant());
+                case ConstantPoolTags.CONSTANT_Integer -> constantPool.addToConstantPool(this.parseIntegerConstant());
+                case ConstantPoolTags.CONSTANT_Long -> constantPool.addToConstantPool(this.parseLongConstant());
+                case ConstantPoolTags.CONSTANT_Float -> constantPool.addToConstantPool(this.parseFloatConstant());
+                case ConstantPoolTags.CONSTANT_Double -> constantPool.addToConstantPool(this.parseDoubleConstant());
+                case ConstantPoolTags.CONSTANT_InterfaceMethodref ->
+                        constantPool.addToConstantPool(this.parseInterfaceMethodRefConstant());
+                case ConstantPoolTags.CONSTANT_MethodHandle ->
+                        constantPool.addToConstantPool(this.parseMethodHandleConstant());
+                case ConstantPoolTags.CONSTANT_MethodType ->
+                        constantPool.addToConstantPool(this.parseMethodTypeConstant());
+                case ConstantPoolTags.CONSTANT_Dynamic -> constantPool.addToConstantPool(this.parseDynamicConstant());
+                case ConstantPoolTags.CONSTANT_InvokeDynamic ->
+                        constantPool.addToConstantPool(this.parseInvokeDynamicConstant());
+                case ConstantPoolTags.CONSTANT_Module -> constantPool.addToConstantPool(this.parseModuleConstant());
+                case ConstantPoolTags.CONSTANT_Package -> constantPool.addToConstantPool(this.parsePackageConstant());
             }
         }
-
+        ConstantPoolVisitor constantPoolVisitor = new ConstantPoolVisitor(this.constantPool);
+        this.constantPool.accept(constantPoolVisitor);
         return this.constantPool;
     }
 

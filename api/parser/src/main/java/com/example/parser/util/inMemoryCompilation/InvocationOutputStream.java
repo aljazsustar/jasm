@@ -1,4 +1,4 @@
-package com.example.parser.util;
+package com.example.parser.util.inMemoryCompilation;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;

@@ -1,17 +1,18 @@
 package com.example.jasm.v1.models;
 
 import com.example.parser.types.ClassFile;
+import com.example.parser.util.formatting.types.ClassFileJsonFormat;
 import com.google.gson.Gson;
 
 public class Result {
-    private ClassFile classFile;
+    private ClassFileJsonFormat classFile;
     private ExecutionResult executionResult;
 
-    public ClassFile getClassFile() {
+    public ClassFileJsonFormat getClassFile() {
         return classFile;
     }
 
-    public void setClassFile(ClassFile classFile) {
+    public void setClassFile(ClassFileJsonFormat classFile) {
         this.classFile = classFile;
     }
 

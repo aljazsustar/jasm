@@ -1,9 +1,12 @@
 package com.example.parser.types.constantPool.constants.methods;
 
 import com.example.parser.enums.ConstantPoolTags;
+import com.example.parser.interfaces.ArgVisitor;
 import com.example.parser.interfaces.ClassFileElement;
 import com.example.parser.interfaces.ConstantPoolElement;
+import com.example.parser.interfaces.Visitor;
 import com.example.parser.util.WritingUtil;
+import com.example.parser.util.formatting.types.ConstantPoolElementJsonFormat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,5 +54,15 @@ public class MethodHandleConstant extends ConstantPoolElement implements ClassFi
                 ", tag=" + tag +
                 ", constantPoolIndex=" + constantPoolIndex +
                 '}';
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public void accept(ArgVisitor<List<ConstantPoolElementJsonFormat>> visitor, List<ConstantPoolElementJsonFormat> arg) {
+        visitor.visit(this, arg);
     }
 }

@@ -1,5 +1,9 @@
 package com.example.parser.interfaces;
 
+import com.example.parser.util.formatting.types.ConstantPoolElementJsonFormat;
+
+import java.util.List;
+
 public abstract class ConstantPoolElement implements ClassFileElement {
     protected int tag;
     protected Integer constantPoolIndex;
@@ -19,4 +23,8 @@ public abstract class ConstantPoolElement implements ClassFileElement {
     public void setConstantPoolIndex(Integer constantPoolIndex) {
         this.constantPoolIndex = constantPoolIndex;
     }
+
+    public abstract void accept(Visitor visitor);
+
+    public abstract void accept(ArgVisitor<List<ConstantPoolElementJsonFormat>> visitor, List<ConstantPoolElementJsonFormat> arg);
 }

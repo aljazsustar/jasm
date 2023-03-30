@@ -8,5 +8,6 @@
   <div class="col-6" *ngIf="result">
     <h2 style="color: aliceblue">Execution results:</h2>
     <p style="color: aliceblue">Standard output: {{result.executionResult.stdOut}}</p>
+    <app-constant-pool [constantPool]="result?.classFile?.constantPool"></app-constant-pool>
   </div>
 </div>

@@ -1,7 +1,10 @@
 package com.example.parser.types.constantPool;
 
+import com.example.parser.interfaces.ArgVisitor;
 import com.example.parser.interfaces.ClassFileElement;
 import com.example.parser.interfaces.ConstantPoolElement;
+import com.example.parser.interfaces.Visitor;
+import com.example.parser.util.formatting.types.ConstantPoolElementJsonFormat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,5 +55,17 @@ public class ConstantPool implements ClassFileElement {
         sb.append("  }");
         sb.append("\n  }");
         return sb.toString();
+    }
+
+    public void accept(Visitor v) {
+        for (ConstantPoolElement element : this.elements) {
+            element.accept(v);
+        }
+    }
+
+    public void accept(ArgVisitor<List<ConstantPoolElementJsonFormat>> visitor, List<ConstantPoolElementJsonFormat> arg) {
+        for (ConstantPoolElement element : this.elements) {
+            element.accept(visitor, arg);
+        }
     }
 }

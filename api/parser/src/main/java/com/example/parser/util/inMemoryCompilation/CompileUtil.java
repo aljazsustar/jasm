@@ -1,4 +1,4 @@
-package com.example.parser.util;
+package com.example.parser.util.inMemoryCompilation;
 
 public class CompileUtil {
 

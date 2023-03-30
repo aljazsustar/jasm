@@ -8,9 +8,10 @@ import com.example.jasm.v1.models.Result;
 import com.example.parser.exceptions.AttributeDoesNotExistException;
 import com.example.parser.parsing.ClassFileParser;
 import com.example.parser.types.ClassFile;
-import com.example.parser.util.InMemoryFileManager;
-import com.example.parser.util.InvocationOutputStream;
-import com.example.parser.util.JavaSourceFromString;
+import com.example.parser.util.formatting.types.ClassFileJsonFormat;
+import com.example.parser.util.inMemoryCompilation.InMemoryFileManager;
+import com.example.parser.util.inMemoryCompilation.InvocationOutputStream;
+import com.example.parser.util.inMemoryCompilation.JavaSourceFromString;
 import com.kumuluz.ee.cors.annotations.CrossOrigin;
 
 import javax.annotation.security.PermitAll;
@@ -58,7 +59,7 @@ public class Jasm {
             res = compileAndExecute(className, content);
         } catch (AttributeDoesNotExistException | IOException | ClassNotFoundException | NoSuchMethodException |
                  InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            return Response.serverError().build();
+            throw new RuntimeException(e);
         }
         return Response.ok(res.toJsonString()).header("Access-Control-Allow-Origin", "*").build();
     }
@@ -108,7 +109,7 @@ public class Jasm {
             System.setOut(invocationOutputStream.getOriginal());
         }
         in.close();
-        res.setClassFile(cf);
+        res.setClassFile(new ClassFileJsonFormat().classFileToJson(cf));
         return res;
     }
 }

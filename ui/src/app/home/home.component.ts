@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from "../services/api.service";
 import {Result} from "../services/models/classFile";
 import {EditorComponent} from "../shared/components/code-editor/editor.component";
-import { Buffer } from 'buffer';
+import {Buffer} from 'buffer';
 
 window.Buffer = Buffer;
 
@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit {
   onCompile() {
     this.apiService.compileSource(this.codeEditor?.codeModel?.value).subscribe(res => {
       this.result = res;
+      console.log(this.result.classFile?.constantPool)
       this.showSaveClassFile = true;
     });
   }

@@ -1,10 +1,9 @@
 package com.example.parser.types.constantPool.constants.numeric;
 
 import com.example.parser.enums.ConstantPoolTags;
-import com.example.parser.interfaces.ClassFileElement;
-import com.example.parser.interfaces.ConstantPoolElement;
-import com.example.parser.interfaces.ConstantValue;
+import com.example.parser.interfaces.*;
 import com.example.parser.util.WritingUtil;
+import com.example.parser.util.formatting.types.ConstantPoolElementJsonFormat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,5 +40,15 @@ public class LongConstant extends ConstantPoolElement implements ClassFileElemen
                 ", tag=" + tag +
                 ", constantPoolIndex=" + constantPoolIndex +
                 '}';
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public void accept(ArgVisitor<List<ConstantPoolElementJsonFormat>> visitor, List<ConstantPoolElementJsonFormat> arg) {
+        visitor.visit(this, arg);
     }
 }

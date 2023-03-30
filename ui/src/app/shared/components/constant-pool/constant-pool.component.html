@@ -1,0 +1,17 @@
+<div>
+  <h4>Constant pool</h4>
+  <table class="table">
+    <tr>
+      <th scope="col">Index</th>
+      <th scope="col">Type</th>
+      <th scope="col">Name</th>
+      <th scope="col">Value</th>
+    </tr>
+    <tr *ngFor="let el of constantPool">
+      <td>{{el.constantPoolIndex}}</td>
+      <td>{{el.type}}</td>
+      <td>{{el.name}}</td>
+      <td>{{el.value}}</td>
+    </tr>
+  </table>
+</div>
