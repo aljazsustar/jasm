@@ -81,7 +81,9 @@ public class ByteCodeInserter {
     private static Integer getMaxStackSizeDiff(JasmBlock jasmBlock) {
         Integer diff = 0;
         for (Pair<Mnemonic, Arguments> command : jasmBlock.getByteCode()) {
-            if (command.getFirst().getMnemonic().contains("load") || command.getFirst().getMnemonic().contains("push"))
+            if (command.getFirst().getMnemonic().contains("load")
+                    || command.getFirst().getMnemonic().contains("push")
+                    || command.getFirst().getMnemonic().contains("const"))
                 ++diff;
         }
 
