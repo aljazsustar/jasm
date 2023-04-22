@@ -12,15 +12,24 @@ public class JasmBlock {
     private Integer jasmBlockStartLine;
     private Integer jasmBlockEndLine;
     private MethodInfo method;
+    private List<String> methodStrings;
     private List<Pair<Mnemonic, Arguments>> byteCode;
 
-    public JasmBlock(Integer jasmBlockStartLine, Integer jasmBlockEndLine, MethodInfo method, List<Pair<Mnemonic, Arguments>> byteCode) {
+    public JasmBlock(Integer jasmBlockStartLine, Integer jasmBlockEndLine, MethodInfo method, List<String> methodStrings, List<Pair<Mnemonic, Arguments>> byteCode) {
         this.jasmBlockStartLine = jasmBlockStartLine;
         this.jasmBlockEndLine = jasmBlockEndLine;
         this.method = method;
+        this.methodStrings = methodStrings;
         this.byteCode = byteCode;
     }
 
+    public List<String> getMethodStrings() {
+        return methodStrings;
+    }
+
+    public void setMethodStrings(List<String> methodStrings) {
+        this.methodStrings = methodStrings;
+    }
 
     public Integer getJasmBlockStartLine() {
         return jasmBlockStartLine;

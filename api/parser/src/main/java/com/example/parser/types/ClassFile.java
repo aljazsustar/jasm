@@ -3,13 +3,16 @@ package com.example.parser.types;
 import com.example.parser.types.attributes.Attributes;
 import com.example.parser.types.constantPool.ConstantPool;
 import com.example.parser.types.constantPool.constants.ClassConstant;
+import com.example.parser.types.constantPool.constants.methods.MethodRefConstant;
 import com.example.parser.types.fields.Fields;
 import com.example.parser.types.interfaces.Interfaces;
+import com.example.parser.types.methods.MethodInfo;
 import com.example.parser.types.methods.Methods;
 import com.example.parser.util.WritingUtil;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ClassFile {
     private Long magic;
@@ -155,6 +158,12 @@ public class ClassFile {
 
     public void setAttributes(Attributes attributes) {
         this.attributes = attributes;
+    }
+
+    public com.example.parser.util.types.Methods getAllMethods() {
+        List<MethodInfo> localMethods = this.methods.getMethods();
+        List<MethodRefConstant> methodRefs = this.constant_pool.getMethods();
+        return new com.example.parser.util.types.Methods(localMethods, methodRefs);
     }
 
     @Override

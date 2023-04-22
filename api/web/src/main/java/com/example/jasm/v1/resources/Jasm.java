@@ -85,7 +85,7 @@ public class Jasm {
         }
 
         ClassFile cf = new ClassFileParser(new BufferedInputStream(in)).parse();
-        List<JasmBlock> jasmBlocks = JasmBlocksParser.extractJasmBlocks(source, cf.getMethods().getJasmAnnotationsPerMethod());
+        List<JasmBlock> jasmBlocks = JasmBlocksParser.extractJasmBlocks(source, cf.getMethods().getJasmAnnotationsPerMethod(), cf.getConstant_pool());
         ByteCodeInserter.insertBytecode(jasmBlocks, cf);
         manager.getBytesMap().get(className).openOutputStream().reset();
         manager.getBytesMap().get(className).openOutputStream().write(cf.writeBytes());

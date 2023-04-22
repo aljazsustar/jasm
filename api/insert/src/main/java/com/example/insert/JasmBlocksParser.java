@@ -10,6 +10,7 @@ import com.example.parser.types.attributes.util.types.annotations.elementValue.A
 import com.example.parser.types.attributes.util.types.annotations.elementValue.ConstValue;
 import com.example.parser.types.attributes.util.types.code.Arguments;
 import com.example.parser.types.attributes.util.types.code.Mnemonic;
+import com.example.parser.types.constantPool.ConstantPool;
 import com.example.parser.types.methods.MethodInfo;
 import com.example.parser.util.types.Pair;
 
@@ -19,21 +20,22 @@ import java.util.List;
 
 public class JasmBlocksParser {
 
-    public static List<JasmBlock> extractJasmBlocks(String source, List<Pair<MethodInfo, Annotation>> jasmBlocks) {
+    public static List<JasmBlock> extractJasmBlocks(String source, List<Pair<MethodInfo, Annotation>> jasmBlocks, ConstantPool constantPool) {
         String[] sourceLines = source.split("\n");
         List<Pair<MethodInfo, Pair<Integer, Integer>>> jasmStartEnd = getJasmStartEndLines(jasmBlocks);
         List<JasmBlock> res = new ArrayList<>(jasmBlocks.size());
 
         for (Pair<MethodInfo, Pair<Integer, Integer>> pair : jasmStartEnd) {
             String[] rawBytecode = Arrays.copyOfRange(sourceLines, pair.getSecond().getFirst() - 1, pair.getSecond().getSecond());
-            res.add(extractJasmBlock(rawBytecode, pair.getSecond().getFirst(), pair.getSecond().getSecond(), pair.getFirst()));
+            res.add(extractJasmBlock(rawBytecode, pair.getSecond().getFirst(), pair.getSecond().getSecond(), pair.getFirst(), constantPool));
         }
         return res;
     }
 
-    private static JasmBlock extractJasmBlock(String[] jasmSource, Integer jasmStart, Integer jasmEnd, MethodInfo method) {
+    private static JasmBlock extractJasmBlock(String[] jasmSource, Integer jasmStart, Integer jasmEnd, MethodInfo method, ConstantPool constantPool) {
         Mnemonics mnemonics = new Mnemonics();
         List<Pair<Mnemonic, Arguments>> code = new ArrayList<>();
+        List<String> methodStrings = new ArrayList<>();
 
         for (String s : jasmSource) {
             String[] split = s.strip().replaceAll(" +", " ").split(" ");
@@ -41,6 +43,22 @@ public class JasmBlocksParser {
             Arguments arguments = new Arguments();
 
             for (int i = 1; i < split.length; i++) {
+
+                if (split[i].strip().startsWith("#")) {
+                    split[i] = split[i].substring(1);
+
+                    if (split[i].split("\\.").length == 2) {
+                        String[] nameAndType = split[i].split("\\.");
+                        Integer cpIndex = constantPool.getMethodByFullyQualifiedName(nameAndType[0], nameAndType[1]).getConstantPoolIndex();
+                        arguments.addArgument(cpIndex + 1);
+                        ;
+                    } else {
+                        Integer cpIndex = constantPool.getMethodByMethodName(split[i]).getConstantPoolIndex();
+                        arguments.addArgument(cpIndex + 1);
+                    }
+                    continue;
+                }
+
                 arguments.addArgument(Integer.parseInt(split[i].strip()));
             }
 
@@ -49,7 +67,7 @@ public class JasmBlocksParser {
 
         }
 
-        return new JasmBlock(jasmStart, jasmEnd, method, code);
+        return new JasmBlock(jasmStart, jasmEnd, method, methodStrings, code);
     }
 
     private static List<Pair<MethodInfo, Pair<Integer, Integer>>> getJasmStartEndLines(List<Pair<MethodInfo, Annotation>> jasmBlocks) {

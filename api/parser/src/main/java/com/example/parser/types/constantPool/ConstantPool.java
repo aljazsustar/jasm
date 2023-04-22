@@ -1,13 +1,16 @@
 package com.example.parser.types.constantPool;
 
+import com.example.parser.enums.ConstantPoolTags;
 import com.example.parser.interfaces.ArgVisitor;
 import com.example.parser.interfaces.ClassFileElement;
 import com.example.parser.interfaces.ConstantPoolElement;
 import com.example.parser.interfaces.Visitor;
+import com.example.parser.types.constantPool.constants.methods.MethodRefConstant;
 import com.example.parser.util.formatting.types.ConstantPoolElementJsonFormat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConstantPool implements ClassFileElement {
     List<ConstantPoolElement> elements;
@@ -39,6 +42,34 @@ public class ConstantPool implements ClassFileElement {
 
     public Integer getSize() {
         return this.elements.size();
+    }
+
+    public List<MethodRefConstant> getMethods() {
+        return this.elements
+                .stream()
+                .filter(el -> el.getTag() == ConstantPoolTags.CONSTANT_Methodref)
+                .map(el -> (MethodRefConstant) el)
+                .collect(Collectors.toList());
+    }
+
+    public MethodRefConstant getMethodByMethodName(String name) {
+        return this.elements
+                .stream()
+                .filter(el -> el.getTag() == ConstantPoolTags.CONSTANT_Methodref)
+                .map(el -> (MethodRefConstant) el)
+                .filter(el -> el.getNameAndTypeConstant().getName().getValue().equals(name))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    public MethodRefConstant getMethodByFullyQualifiedName(String type, String name) {
+        return this.elements
+                .stream()
+                .filter(el -> el.getTag() == ConstantPoolTags.CONSTANT_Methodref)
+                .map(el -> (MethodRefConstant) el)
+                .filter(el -> el.getClassConstant().getClassName().getValue().equals(type)
+                        && el.getNameAndTypeConstant().getName().getValue().equals(name))
+                .findFirst().orElseThrow();
     }
 
     public ConstantPoolElement getConstantPoolElement(Integer constantPoolIndex) {
