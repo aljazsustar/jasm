@@ -1,32 +1,28 @@
 package com.example.parser.types.attributes.util.types.stackMapTable;
 
 import com.example.parser.interfaces.ClassFileElement;
+import com.example.parser.interfaces.VerificationTypeInfoBase;
 
 import java.util.List;
 
-public class VerificationTypeInfo implements ClassFileElement {
+public class VerificationTypeInfo<T extends VerificationTypeInfoBase> implements ClassFileElement {
 
-    protected Integer tag;
-    protected String name;
+    private T verificationType;
 
-    public Integer getTag() {
-        return tag;
+    public VerificationTypeInfo(T verificationType) {
+        this.verificationType = verificationType;
     }
 
-    public void setTag(Integer tag) {
-        this.tag = tag;
+    public T getVerificationType() {
+        return verificationType;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setVerificationType(T verificationType) {
+        this.verificationType = verificationType;
     }
 
     @Override
     public List<Byte> toHex() {
-        return null;
+        return this.verificationType.toHex();
     }
 }

@@ -3,6 +3,7 @@ package com.example.parser.parsing;
 import com.example.parser.exceptions.AttributeDoesNotExistException;
 import com.example.parser.interfaces.AttributeBase;
 import com.example.parser.interfaces.ConstantValue;
+import com.example.parser.interfaces.StackMapFrameBase;
 import com.example.parser.types.attributes.Attributes;
 import com.example.parser.types.attributes.criticalAttributes.CodeAttribute;
 import com.example.parser.types.attributes.criticalAttributes.ConstantValueAttribute;
@@ -15,11 +16,13 @@ import com.example.parser.types.attributes.util.types.annotations.Annotations;
 import com.example.parser.types.attributes.util.types.code.Code;
 import com.example.parser.types.attributes.util.types.code.Exceptions;
 import com.example.parser.types.attributes.util.types.lineNumberTable.LineNumberTable;
+import com.example.parser.types.attributes.util.types.stackMapTable.StackMapFrame;
 import com.example.parser.types.constantPool.ConstantPool;
 import com.example.parser.types.constantPool.constants.strings.Utf8Constant;
 import com.example.parser.util.ParsingUtil;
 
 import java.io.BufferedInputStream;
+import java.util.List;
 
 public class AttributeParser {
 
@@ -56,7 +59,7 @@ public class AttributeParser {
             case "SourceFile":
                 return this.parseSourceFileAttribute(attributeNameIndex, attributeName);
             case "StackMapTable":
-                return this.parseStackMapTableAttribute(attributeName);
+                return this.parseStackMapTableAttribute(attributeNameIndex, attributeName);
             case "Exceptions":
                 return this.parseExceptionsAttribute(attributeName);
             case "BootstrapMethods":
@@ -106,10 +109,10 @@ public class AttributeParser {
         return new SourceFileAttribute(attributeNameIndex, attributeName, attributeLength, nameConstantPoolIndex, sourceFileName);
     }
 
-    private StackMapTableAttribute parseStackMapTableAttribute(Utf8Constant attributeNane) {
+    private StackMapTableAttribute parseStackMapTableAttribute(Integer attributeNameIndex, Utf8Constant attributeNane) {
         Long attributeLength = ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, 4));
-        ParsingUtil.bytesToLong(ParsingUtil.readNBytes(this.inputStream, attributeLength.intValue()));
-        return null;
+        List<StackMapFrame<? extends StackMapFrameBase>> entries = AttributesUtil.parseStackMapFrames(inputStream);
+        return new StackMapTableAttribute(attributeLength, attributeNameIndex, attributeNane, entries);
     }
 
     private AttributeBase parseExceptionsAttribute(Utf8Constant attributeName) {

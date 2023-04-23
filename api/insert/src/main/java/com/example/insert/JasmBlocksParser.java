@@ -51,7 +51,6 @@ public class JasmBlocksParser {
                         String[] nameAndType = split[i].split("\\.");
                         Integer cpIndex = constantPool.getMethodByFullyQualifiedName(nameAndType[0], nameAndType[1]).getConstantPoolIndex();
                         arguments.addArgument(cpIndex + 1);
-                        ;
                     } else {
                         Integer cpIndex = constantPool.getMethodByMethodName(split[i]).getConstantPoolIndex();
                         arguments.addArgument(cpIndex + 1);
