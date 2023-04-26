@@ -12,7 +12,6 @@ export class ConstantPoolComponent implements OnInit {
   public constantPool: ConstantPoolElementJsonFormat[] | undefined;
 
   ngOnInit() {
-    console.log(this.constantPool)
   }
 
 

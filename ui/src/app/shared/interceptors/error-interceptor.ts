@@ -12,7 +12,6 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(map(event => {
         if (event.type === HttpEventType.Response && event.body.error) {
-          console.log(event.body.error)
           this.toastService.showErrorToast(event.body.error.summary, event.body.error.details);
         }
         return event;

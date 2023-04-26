@@ -6,6 +6,7 @@ import com.jasm.insert.types.JasmBlock;
 import com.jasm.jasm.v1.models.ExecutionResult;
 import com.jasm.jasm.v1.models.Result;
 import com.jasm.parser.exceptions.AttributeDoesNotExistException;
+import com.jasm.parser.exceptions.CompilationError;
 import com.jasm.parser.exceptions.InvalidMnenonicException;
 import com.jasm.parser.parsing.ClassFileParser;
 import com.jasm.parser.types.ClassFile;
@@ -35,6 +36,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -76,8 +78,11 @@ public class Jasm {
 
         boolean result = task.call();
         if (!result) {
-            diagnostics.getDiagnostics()
-                    .forEach(d -> Logger.getLogger("diagnostics").log(Level.SEVERE, String.valueOf(d)));
+            String error = diagnostics.getDiagnostics()
+                    .stream()
+                    .map(el -> "Error at line " + el.getLineNumber() + ": " + el.getColumnNumber() + "\n" + el.getMessage(Locale.US))
+                    .reduce("", (acc ,d) -> acc + d + "\n");
+            throw new CompilationError(error);
         }
         PipedInputStream in = new PipedInputStream();
         try (final PipedOutputStream out = new PipedOutputStream(in)) {
