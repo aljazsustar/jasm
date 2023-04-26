@@ -12,8 +12,8 @@ export class EditorComponent {
   codeModel: CodeModel = {
     language: 'java',
     uri: 'Main.java',
-    value: `import com.example.insert.annotations.Block;
-import com.example.insert.annotations.Jasm;
+    value: `import com.jasm.insert.annotations.Block;
+import com.jasm.insert.annotations.Jasm;
 
 public class Main {
 
