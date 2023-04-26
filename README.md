@@ -54,4 +54,3 @@ invokestatic #<ime_metode>
 ```
 . V prvem primeru ukazu podamo indeks v naboru konstant. V drugem pa podamo ime metode. Ime metode je lahko zgolj ime metode, lahko pa je polno ime, ki vsebuje tudi razred, v katerem se metoda nahaja. Če podamo zgolj ime metode, v naboru konstant pa obstajata dve metodi z istim razredom, se uporabi prva metoda, ki je najdena v naboru konstant. 
 
-# Work in progress!
