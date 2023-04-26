@@ -28,7 +28,6 @@ export class HomeComponent implements OnInit {
   onCompile() {
     this.apiService.compileSource(this.codeEditor?.codeModel?.value).subscribe(res => {
       this.result = res;
-      console.log(this.result.classFile?.constantPool)
       this.showSaveClassFile = true;
     });
   }
