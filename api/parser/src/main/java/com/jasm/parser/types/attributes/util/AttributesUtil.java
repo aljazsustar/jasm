@@ -1,6 +1,7 @@
 package com.jasm.parser.types.attributes.util;
 
 import com.jasm.parser.enums.Mnemonics;
+import com.jasm.parser.exceptions.InvalidMnenonicException;
 import com.jasm.parser.interfaces.ConstantValue;
 import com.jasm.parser.enums.VerificationTypeTags;
 import com.jasm.parser.interfaces.StackMapFrameBase;

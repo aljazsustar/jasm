@@ -1,13 +1,12 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
-import { EditorComponent } from './shared/components/code-editor/editor.component';
-import { CodeEditorToolbarComponent } from './shared/components/code-editor-toolbar/code-editor-toolbar.component';
 import {SharedModule} from "./shared/shared.module";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {ErrorInterceptor} from "./shared/interceptors/error-interceptor";
 
 @NgModule({
   declarations: [
@@ -20,9 +19,10 @@ import {HttpClientModule} from "@angular/common/http";
     SharedModule,
     HttpClientModule
   ],
-  providers: [],
-  exports: [
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
   ],
+  exports: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

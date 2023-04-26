@@ -2,8 +2,3 @@ kumuluzee:
   server:
     http:
       port: 8080
-  cors-filter:
-    annotations:
-      my-resource:
-        allow-origin: "*"
-        allow-subdomains: true

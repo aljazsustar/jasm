@@ -6,6 +6,7 @@ import com.jasm.insert.types.JasmBlock;
 import com.jasm.jasm.v1.models.ExecutionResult;
 import com.jasm.jasm.v1.models.Result;
 import com.jasm.parser.exceptions.AttributeDoesNotExistException;
+import com.jasm.parser.exceptions.InvalidMnenonicException;
 import com.jasm.parser.parsing.ClassFileParser;
 import com.jasm.parser.types.ClassFile;
 import com.jasm.parser.util.formatting.types.ClassFileJsonFormat;
@@ -58,13 +59,13 @@ public class Jasm {
         try {
             res = compileAndExecute(className, content);
         } catch (AttributeDoesNotExistException | IOException | ClassNotFoundException | NoSuchMethodException |
-                 InvocationTargetException | InstantiationException | IllegalAccessException e) {
+                 InvocationTargetException | InstantiationException | IllegalAccessException | InvalidMnenonicException e) {
             throw new RuntimeException(e);
         }
         return Response.ok(res.toJsonString()).header("Access-Control-Allow-Origin", "*").build();
     }
 
-    public Result compileAndExecute(String className, String source) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, AttributeDoesNotExistException, IOException {
+    public Result compileAndExecute(String className, String source) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, AttributeDoesNotExistException, IOException, InvalidMnenonicException {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
         InMemoryFileManager manager = new InMemoryFileManager(compiler.getStandardFileManager(null, null, null));

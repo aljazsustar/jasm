@@ -2,6 +2,7 @@ package com.jasm.insert;
 
 import com.jasm.insert.types.JasmBlock;
 import com.jasm.parser.enums.Mnemonics;
+import com.jasm.parser.exceptions.InvalidMnenonicException;
 import com.jasm.parser.types.attributes.util.types.annotations.Annotation;
 import com.jasm.parser.types.attributes.util.types.annotations.ElementValue;
 import com.jasm.parser.types.attributes.util.types.annotations.ElementValuePair;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class JasmBlocksParser {
 
-    public static List<JasmBlock> extractJasmBlocks(String source, List<Pair<MethodInfo, Annotation>> jasmBlocks, ConstantPool constantPool) {
+    public static List<JasmBlock> extractJasmBlocks(String source, List<Pair<MethodInfo, Annotation>> jasmBlocks, ConstantPool constantPool) throws InvalidMnenonicException {
         String[] sourceLines = source.split("\n");
         List<Pair<MethodInfo, Pair<Integer, Integer>>> jasmStartEnd = getJasmStartEndLines(jasmBlocks);
         List<JasmBlock> res = new ArrayList<>(jasmBlocks.size());
@@ -32,14 +33,18 @@ public class JasmBlocksParser {
         return res;
     }
 
-    private static JasmBlock extractJasmBlock(String[] jasmSource, Integer jasmStart, Integer jasmEnd, MethodInfo method, ConstantPool constantPool) {
+    private static JasmBlock extractJasmBlock(String[] jasmSource, Integer jasmStart, Integer jasmEnd, MethodInfo method, ConstantPool constantPool) throws InvalidMnenonicException {
         Mnemonics mnemonics = new Mnemonics();
         List<Pair<Mnemonic, Arguments>> code = new ArrayList<>();
         List<String> methodStrings = new ArrayList<>();
 
         for (String s : jasmSource) {
             String[] split = s.strip().replaceAll(" +", " ").split(" ");
-            Mnemonic mnemonic = new Mnemonic(mnemonics.getOpcodeByMnemonic(split[0]).getFirst(), split[0]);
+            Pair<Integer, Integer> opcodeAndArgs = mnemonics.getOpcodeByMnemonic(split[0]);
+
+            if (opcodeAndArgs == null) throw new InvalidMnenonicException(String.format("Mnemonic %s ni del javanske zložne kode", split[0]));
+
+            Mnemonic mnemonic = new Mnemonic(opcodeAndArgs.getFirst(), split[0]);
             Arguments arguments = new Arguments();
 
             for (int i = 1; i < split.length; i++) {

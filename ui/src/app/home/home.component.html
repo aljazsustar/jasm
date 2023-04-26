@@ -10,8 +10,4 @@
     <p style="color: aliceblue">Standard output: {{result?.executionResult?.stdOut}}</p>
     <app-constant-pool [constantPool]="result?.classFile?.constantPool"></app-constant-pool>
   </div>
-  <div class="col-sm-12 col-md-6" style="background-color: #cd5c5caa" *ngIf="result?.error">
-    <h2>{{ result?.error?.summary }}</h2>
-    <p>{{ result?.error?.details }}</p>
-  </div>
 </div>

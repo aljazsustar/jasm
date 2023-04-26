@@ -6,6 +6,9 @@ import {EditorComponent} from "./components/code-editor/editor.component";
 import {TopbarComponent} from './components/topbar/topbar.component';
 import {RouterLink} from "@angular/router";
 import {ConstantPoolComponent} from './components/constant-pool/constant-pool.component';
+import {ToastComponent} from './components/toast/toast.component';
+import {ToasterComponent} from './components/toaster/toaster.component';
+import {NgbToast} from "@ng-bootstrap/ng-bootstrap";
 
 
 @NgModule({
@@ -13,18 +16,23 @@ import {ConstantPoolComponent} from './components/constant-pool/constant-pool.co
     EditorComponent,
     CodeEditorToolbarComponent,
     TopbarComponent,
-    ConstantPoolComponent
+    ConstantPoolComponent,
+    ToastComponent,
+    ToasterComponent
   ],
-    exports: [
-      EditorComponent,
-      CodeEditorToolbarComponent,
-      TopbarComponent,
-      ConstantPoolComponent
-    ],
+  exports: [
+    EditorComponent,
+    CodeEditorToolbarComponent,
+    TopbarComponent,
+    ConstantPoolComponent,
+    ToastComponent,
+    ToasterComponent
+  ],
   imports: [
     CommonModule,
     CodeEditorModule.forRoot(),
-    RouterLink
+    RouterLink,
+    NgbToast
   ]
 })
 export class SharedModule { }
