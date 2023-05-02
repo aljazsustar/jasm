@@ -18,7 +18,7 @@ cd jasm
 docker-compose up -d
 ```
 
-Aplikacija je po zagonu dostopna preko brskalnika na naslovu [](http://localhost:6969).
+Aplikacija je po zagonu dostopna preko brskalnika na naslovu [http://localhost:6969](http://localhost:6969).
 
 ### Uporaba
 
