@@ -6,7 +6,7 @@ import static java.util.Objects.requireNonNull;
 
 class InMemoryClassLoader extends ClassLoader {
 
-    private InMemoryFileManager manager;
+    private final InMemoryFileManager manager;
 
     public InMemoryClassLoader(ClassLoader parent, InMemoryFileManager manager) {
         super(parent);

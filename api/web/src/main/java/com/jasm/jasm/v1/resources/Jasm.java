@@ -5,8 +5,10 @@ import com.jasm.insert.JasmBlocksParser;
 import com.jasm.insert.types.JasmBlock;
 import com.jasm.jasm.v1.models.ExecutionResult;
 import com.jasm.jasm.v1.models.Result;
+import com.jasm.jasm.v1.util.ExitSecurityManager;
 import com.jasm.parser.exceptions.AttributeDoesNotExistException;
 import com.jasm.parser.exceptions.CompilationError;
+import com.jasm.parser.exceptions.ExecutionError;
 import com.jasm.parser.exceptions.InvalidMnenonicException;
 import com.jasm.parser.parsing.ClassFileParser;
 import com.jasm.parser.types.ClassFile;
@@ -33,6 +35,7 @@ import javax.ws.rs.core.UriInfo;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -105,8 +108,12 @@ public class Jasm {
             PrintStream out = System.out;
             System.setOut(new PrintStream(invocationOutputStream));
             Class<?> clazz = classLoader.loadClass(className);
-            Method m = clazz.getMethod("main", String[].class);
+            try {
+             Method m = clazz.getMethod("main", String[].class);
             m.invoke(null, (Object) null);
+            } catch (VerifyError e) {
+                throw new ExecutionError(e.getMessage());
+            }
             String s = invocationOutputStream.getAndClear();
             res.setExecutionResult(new ExecutionResult(s, cf.writeBytes()));
             System.setOut(out);
