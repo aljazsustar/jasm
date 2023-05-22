@@ -8,9 +8,11 @@
   <div class="col-sm-12 col-md-6" *ngIf="result?.executionResult || result?.classFile">
     <h2 style="color: #c73a30">Execution results:</h2>
     <p style="white-space: pre-line; color: aliceblue">Standard output: </p>
-    <code style="white-space: pre-line;">
-      {{result?.executionResult?.stdOut}}
-    </code>
+    <div style="background-color: rgb(22, 27, 34)">
+      <code style="white-space: pre-line;">
+        {{result?.executionResult?.stdOut}}
+      </code>
+    </div>
     <br>
     <app-constant-pool [constantPool]="result?.classFile?.constantPool"></app-constant-pool>
   </div>

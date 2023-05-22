@@ -21,7 +21,7 @@ public class FormattingVisitor implements ArgVisitor<List<ConstantPoolElementJso
     @Override
     public void visit(ClassConstant classConstant, List<ConstantPoolElementJsonFormat> arg) {
         ConstantPoolElementJsonFormat el = new ConstantPoolElementJsonFormat();
-        el.constantPoolIndex = classConstant.getConstantPoolIndex();
+        el.constantPoolIndex = classConstant.getConstantPoolIndex() + 1;
         el.type = "Class";
         el.name = classConstant.getClassName().getValue();
         arg.add(el);
